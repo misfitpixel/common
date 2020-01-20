@@ -1,0 +1,16 @@
+{
+    "name": "misfitpixel/common",
+    "description": "Simple library of common project classes packaged for re-use.",
+    "type": "library",
+    "authors": [
+        {
+            "name": "brandinchiu",
+            "email": "brandinchiu@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "doctrine/orm": "*",
+        "symfony/symfony": "^5.0.0"
+    }
+}
