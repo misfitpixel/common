@@ -6,14 +6,14 @@
  * Time: 2:33 PM
  */
 
-namespace Exception;
+namespace MisfitPixel\Exception;
 
 
-use Exception\Abstraction\BaseException;
+use MisfitPixel\Exception\Abstraction\BaseException;
 
 /**
  * Class DeckValidationException
- * @package App\Exception
+ * @package Exception
  */
 class DeckValidationException extends BaseException
 {

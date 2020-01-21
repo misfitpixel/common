@@ -6,14 +6,14 @@
  * Time: 10:23 AM
  */
 
-namespace Exception;
+namespace MisfitPixel\Exception;
 
 
-use Exception\Abstraction\BaseException;
+use MisfitPixel\Exception\Abstraction\BaseException;
 
 /**
  * Class RequestConflictException
- * @package App\Exception
+ * @package MisfitPixel\Exception
  */
 class RequestConflictException extends BaseException
 {

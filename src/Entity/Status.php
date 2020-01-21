@@ -6,12 +6,12 @@
  * Time: 8:52 PM
  */
 
-namespace Entity;
+namespace MisfitPixel\Entity;
 
 
 /**
  * Interface Status
- * @package Entity
+ * @package MisfitPixel\Entity
  */
 interface Status
 {

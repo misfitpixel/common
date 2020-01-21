@@ -6,7 +6,7 @@
  * Time: 3:05 PM
  */
 
-namespace Controller;
+namespace MisfitPixel\Controller;
 
 
 use Symfony\Component\HttpFoundation\JsonResponse;

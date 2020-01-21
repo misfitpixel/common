@@ -6,14 +6,14 @@
  * Time: 3:13 PM
  */
 
-namespace Exception;
+namespace MisfitPixel\Exception;
 
 
-use Exception\Abstraction\BaseException;
+use MisfitPixel\Exception\Abstraction\BaseException;
 
 /**
  * Class UnknownErrorException
- * @package App\Exception
+ * @package MisfitPixel\Exception
  */
 class UnknownErrorException extends BaseException
 {

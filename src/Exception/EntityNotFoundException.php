@@ -6,14 +6,14 @@
  * Time: 11:58 AM
  */
 
-namespace Exception;
+namespace MisfitPixel\Exception;
 
 
-use Exception\Abstraction\BaseException;
+use MisfitPixel\Exception\Abstraction\BaseException;
 
 /**
  * Class EntityNotFoundException
- * @package App\Exception
+ * @package MisfitPixel\Exception
  */
 class EntityNotFoundException extends BaseException
 {

@@ -6,15 +6,15 @@
  * Time: 8:55 PM
  */
 
-namespace Entity\Abstraction;
+namespace MisfitPixel\Entity\Abstraction;
 
 
-use Entity\Meta;
+use MisfitPixel\Entity\Meta;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Trait Descriptive
- * @package Entity\Abstraction
+ * @package MisfitPixel\Entity\Abstraction
  */
 trait Descriptive
 {

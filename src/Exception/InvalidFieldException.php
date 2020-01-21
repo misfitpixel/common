@@ -6,14 +6,14 @@
  * Time: 3:57 PM
  */
 
-namespace Exception;
+namespace MisfitPixel\Exception;
 
 
-use Exception\Abstraction\BaseException;
+use MisfitPixel\Exception\Abstraction\BaseException;
 
 /**
  * Class InvalidFieldException
- * @package App\Exception
+ * @package MisfitPixel\Exception
  */
 class InvalidFieldException extends BaseException
 {

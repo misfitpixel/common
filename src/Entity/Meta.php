@@ -6,12 +6,12 @@
  * Time: 8:57 PM
  */
 
-namespace Entity;
+namespace MisfitPixel\Entity;
 
 
 /**
  * Interface Meta
- * @package Entity
+ * @package MisfitPixel\Entity
  */
 interface Meta
 {

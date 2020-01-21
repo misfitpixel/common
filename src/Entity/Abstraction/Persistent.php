@@ -6,17 +6,17 @@
  * Time: 9:17 PM
  */
 
-namespace Entity\Abstraction;
+namespace MisfitPixel\Entity\Abstraction;
 
 
-use Entity;
-use Exception;
+use MisfitPixel\Entity;
+use MisfitPixel\Exception;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
 /**
  * Trait Persistent
- * @package Entity\Abstraction
+ * @package MisfitPixel\Entity\Abstraction
  */
 trait Persistent
 {

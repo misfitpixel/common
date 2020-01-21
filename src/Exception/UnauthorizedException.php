@@ -6,14 +6,14 @@
  * Time: 1:52 PM
  */
 
-namespace Exception;
+namespace MisfitPixel\Exception;
 
 
-use Exception\Abstraction\BaseException;
+use MisfitPixel\Exception\Abstraction\BaseException;
 
 /**
  * Class UnauthorizedException
- * @package App\Exception
+ * @package MisfitPixel\Exception
  */
 class UnauthorizedException extends BaseException
 {

@@ -6,12 +6,12 @@
  * Time: 8:47 PM
  */
 
-namespace Entity\Abstraction;
+namespace MisfitPixel\Entity\Abstraction;
 
 
 /**
  * Trait Dated
- * @package Entity\Abstraction
+ * @package MisfitPixel\Entity\Abstraction
  */
 trait Dated
 {

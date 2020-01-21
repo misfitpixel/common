@@ -6,15 +6,15 @@
  * Time: 8:48 PM
  */
 
-namespace Entity\Abstraction;
+namespace MisfitPixel\Entity\Abstraction;
 
 
-use Entity\Status;
+use MisfitPixel\Entity\Status;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
 /**
  * Trait Statused
- * @package Entity\Abstraction
+ * @package MisfitPixel\Entity\Abstraction
  */
 trait Statused
 {

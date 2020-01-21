@@ -6,14 +6,14 @@
  * Time: 1:45 PM
  */
 
-namespace Exception;
+namespace MisfitPixel\Exception;
 
 
-use Exception\Abstraction\BaseException;
+use MisfitPixel\Exception\Abstraction\BaseException;
 
 /**
  * Class BadRequestException
- * @package App\Exception
+ * @package MisfitPixel\Exception
  */
 class BadRequestException extends BaseException
 {

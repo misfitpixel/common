@@ -6,14 +6,14 @@
  * Time: 3:54 PM
  */
 
-namespace Exception\Abstraction;
+namespace MisfitPixel\Exception\Abstraction;
 
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class BaseException
- * @package Exception\Abstraction
+ * @package MisfitPixel\Exception\Abstraction
  */
 abstract class BaseException extends HttpException
 {

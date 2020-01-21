@@ -6,14 +6,14 @@
  * Time: 3:30 PM
  */
 
-namespace Exception;
+namespace MisfitPixel\Exception;
 
 
-use Exception\Abstraction\BaseException;
+use MisfitPixel\Exception\Abstraction\BaseException;
 
 /**
  * Class RoundNotCompleteException
- * @package App\Exception
+ * @package MisfitPixel\Exception
  */
 class RoundNotCompleteException extends BaseException
 {

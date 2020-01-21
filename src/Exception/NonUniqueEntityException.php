@@ -6,14 +6,14 @@
  * Time: 2:39 PM
  */
 
-namespace Exception;
+namespace MisfitPixel\Exception;
 
 
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class NonUniqueEntityException
- * @package App\Exception
+ * @package MisfitPixel\Exception
  */
 class NonUniqueEntityException extends EntityNotFoundException
 {

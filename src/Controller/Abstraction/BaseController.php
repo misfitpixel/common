@@ -6,7 +6,7 @@
  * Time: 3:08 PM
  */
 
-namespace Controller\Abstraction;
+namespace MisfitPixel\Controller\Abstraction;
 
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
