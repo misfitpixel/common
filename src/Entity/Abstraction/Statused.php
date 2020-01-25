@@ -18,9 +18,6 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  */
 trait Statused
 {
-
-    use Respondent;
-
     /** @var int */
     private $statusId;
 

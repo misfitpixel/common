@@ -9,12 +9,16 @@
 namespace MisfitPixel\Entity;
 
 
+use MisfitPixel\Entity\Abstraction\Respondent;
+
 /**
  * Class Status
  * @package MisfitPixel\Entity
  */
 class Status
 {
+    use Respondent;
+
     const ACTIVE = 1;
     const INACTIVE = 2;
     const EXPIRED = 3;
