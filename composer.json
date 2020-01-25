@@ -11,6 +11,7 @@
     "require": {
         "php": ">=7.1",
         "doctrine/orm": "*",
-        "symfony/framework-bundle": "^5.0.0"
+        "symfony/framework-bundle": "^5.0.0",
+        "symfony/orm-pack": "^1.0"
     }
 }
