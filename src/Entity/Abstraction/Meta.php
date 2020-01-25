@@ -6,12 +6,12 @@
  * Time: 8:57 PM
  */
 
-namespace MisfitPixel\Entity;
+namespace MisfitPixel\Entity\Abstraction;
 
 
 /**
  * Interface Meta
- * @package MisfitPixel\Entity
+ * @package MisfitPixel\Entity\Abstraction
  */
 interface Meta
 {

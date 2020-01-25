@@ -18,8 +18,30 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  */
 trait Statused
 {
+    /** @var int */
+    private $statusId;
+
     /** @var Status */
     private $status;
+
+    /**
+     * @return int
+     */
+    public function getStatusId(): int
+    {
+        return $this->statusId;
+    }
+
+    /**
+     * @param int $id
+     * @return self
+     */
+    public function setStatusId(int $id): self
+    {
+        $this->statusId = $id;
+
+        return $this;
+    }
 
     /**
      * @return Status

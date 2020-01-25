@@ -6,14 +6,14 @@
  * Time: 3:09 PM
  */
 
-namespace MisfitPixel\Controller\Abstraction;
+namespace MisfitPixel\Response\Abstraction;
 
 
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class JsonResponse
- * @package Controller\Abstraction
+ * @package MisfitPixel\Response\Abstraction
  */
 class JsonResponse extends \Symfony\Component\HttpFoundation\JsonResponse
 {

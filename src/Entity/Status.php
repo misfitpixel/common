@@ -10,10 +10,10 @@ namespace MisfitPixel\Entity;
 
 
 /**
- * Interface Status
+ * Class Status
  * @package MisfitPixel\Entity
  */
-interface Status
+class Status
 {
     const ACTIVE = 1;
     const INACTIVE = 2;
@@ -21,13 +21,56 @@ interface Status
     const DELETED = 4;
     const COMPLETE = 5;
 
+    /** @var int */
+    private $id;
+
+    public function __construct(int $id)
+    {
+        $this->id = $id;
+    }
+
     /**
      * @return int
      */
-    public function getId(): int;
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     /**
      * @return string
      */
-    public function getName(): string;
+    public function getName(): string
+    {
+        switch($this->getId()) {
+            case self::ACTIVE:
+                $name = 'active';
+
+                break;
+
+            case self::INACTIVE:
+                $name = 'inactive';
+
+                break;
+
+            case self::EXPIRED:
+                $name = 'expired';
+
+                break;
+
+            case self::DELETED:
+                $name = 'deleted';
+
+                break;
+
+            case self::COMPLETE:
+                $name = 'complete';
+
+                break;
+
+            default:
+                $name = 'na';
+        }
+        return $name;
+    }
 }
