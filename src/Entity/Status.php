@@ -19,7 +19,7 @@ class Status
 {
     use Respondent {
         getResponse as getDefaultResponse;
-    };
+    }
 
     const ACTIVE = 1;
     const INACTIVE = 2;
