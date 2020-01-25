@@ -52,9 +52,7 @@ trait Respondent
              * grab all of the properties and create a response array.
              */
             if($reflection->getMethod($methodName)) {
-                if(
-                !is_object($this->$methodName())
-                ) {
+                if(!is_object($this->$methodName())) {
                     $value = $this->$methodName();
 
                 } elseif(method_exists($this->$methodName(), 'getResponse')) {

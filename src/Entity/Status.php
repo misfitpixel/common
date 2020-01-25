@@ -17,7 +17,9 @@ use MisfitPixel\Entity\Abstraction\Respondent;
  */
 class Status
 {
-    use Respondent;
+    use Respondent {
+        getResponse as getDefaultResponse;
+    };
 
     const ACTIVE = 1;
     const INACTIVE = 2;
@@ -28,24 +30,17 @@ class Status
     /** @var int */
     private $id;
 
+    /** @var string */
+    private $name;
+
+    /**
+     * Status constructor.
+     * @param int $id
+     */
     public function __construct(int $id)
     {
         $this->id = $id;
-    }
 
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
         switch($this->getId()) {
             case self::ACTIVE:
                 $name = 'active';
@@ -75,6 +70,38 @@ class Status
             default:
                 $name = 'na';
         }
-        return $name;
+
+        $this->name = $name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return array
+     * @throws \ReflectionException
+     */
+    public function getResponse(): array
+    {
+        $response = $this->getDefaultResponse();
+
+        if(isset($response['status_id'])) {
+            unset($response['status_id']);
+        }
+
+        return $response;
     }
 }
