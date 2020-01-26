@@ -48,6 +48,10 @@ trait Statused
      */
     public function getStatus(): Status
     {
+        if($this->getStatusId()) {
+            $this->status = new Status($this->getStatusId());
+        }
+
         return $this->status;
     }
 
