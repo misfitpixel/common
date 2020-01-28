@@ -65,8 +65,8 @@ class CorsHandler
             ])
         ;
 
-        */$event->getRequest()->attributes->set('oauth_token', $token);
-
+        $event->getRequest()->attributes->set('oauth_token', $token);
+*/
         return;
     }
 
