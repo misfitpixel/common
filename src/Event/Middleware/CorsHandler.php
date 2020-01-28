@@ -58,14 +58,14 @@ class CorsHandler
          * capture the token and assign it to the request.
          * TODO: better way to get class name? (App\Entity\OauthToken)
          */
-        $token = $this->container->get('doctrine')->getRepository('App\Entity\OauthToken')
+        /*$token = $this->container->get('doctrine')->getRepository('App\Entity\OauthToken')
             ->findOneBy([
                 'token' => $event->getRequest()->headers->get('Authorization'),
                 'oauthTokenType' => OauthTokenType::ACCESS_TOKEN
             ])
         ;
 
-        $event->getRequest()->attributes->set('oauth_token', $token);
+        */$event->getRequest()->attributes->set('oauth_token', $token);
 
         return;
     }
