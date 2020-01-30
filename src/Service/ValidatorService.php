@@ -6,20 +6,33 @@
  * Time: 7:09 PM
  */
 
-namespace MisfitPixel\Service\Validator;
+namespace MisfitPixel\Service;
 
 
 use MisfitPixel\Exception;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class ValidatorService
- * @package MisfitPixel\Service\Validator
+ * @package MisfitPixel\Service
  */
 class ValidatorService
 {
+    /** @var ContainerInterface  */
+    private $container;
+
+    /**
+     * ValidatorService constructor.
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * @param Request $request
      * @return bool
@@ -37,7 +50,10 @@ class ValidatorService
             /**
              * load the schema file.
              */
-            $schema = Yaml::parseFile(sprintf('%s/schema/%s.yml', __DIR__, $request->get('_route')));
+            $schema = Yaml::parseFile(sprintf('%s/config/schema_validator/%s.yml',
+                $this->container->get('kernel')->getProjectDir(),
+                $request->get('_route')
+            ));
 
             if($schema == null) {
                 return true;

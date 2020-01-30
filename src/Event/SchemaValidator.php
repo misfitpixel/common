@@ -9,7 +9,7 @@
 namespace MisfitPixel\Event;
 
 
-use MisfitPixel\Service\Validator\ValidatorService;;
+use MisfitPixel\Service\ValidatorService;;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
