@@ -13,6 +13,7 @@
         "doctrine/orm": "*",
         "symfony/framework-bundle": "^5.0.0",
         "symfony/orm-pack": "^1.0",
-        "twig/twig": "^3.0"
+        "twig/twig": "^3.0",
+        "symfony/yaml": "^5.0"
     }
 }
