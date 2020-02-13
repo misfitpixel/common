@@ -42,7 +42,7 @@ class ValidatorService
     {
         $data = json_decode($request->getContent(), true);
 
-        if($data == null) {
+        if($data === null) {
             return false;
         }
 
@@ -120,7 +120,7 @@ class ValidatorService
                         (
                             (isset($params['min']) && strlen($node[$field]) < $params['min']) ||
                             (isset($params['max']) && strlen($node[$field]) > $params['max']) ||
-                            (isset($params['pattern']) && !(bool)preg_match(sprintf('/%s/', $params['pattern']), $node[$field]))
+                            (isset($params['pattern']) && !(bool)preg_match(sprintf('%s', $params['pattern']), $node[$field]))
                         )
                     ) {
                         throw new Exception\InvalidFieldException(sprintf('Invalid field value for %s%s',
