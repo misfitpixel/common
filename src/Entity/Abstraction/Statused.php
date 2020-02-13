@@ -80,4 +80,17 @@ trait Statused
 
         return $this;
     }
+
+    /**
+     * @param LifecycleEventArgs $event
+     * @return $this
+     */
+    public function setDefaultStatusId(LifecycleEventArgs $event): self
+    {
+        if($this->statusId === null) {
+            $this->statusId = Status::ACTIVE;
+        }
+
+        return $this;
+    }
 }
