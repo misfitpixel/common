@@ -9,7 +9,7 @@
 namespace MisfitPixel\Entity\Abstraction;
 
 
-use MisfitPixel\Entity\Meta;
+use MisfitPixel\Entity\Abstraction\Meta;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**

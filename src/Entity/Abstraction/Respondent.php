@@ -75,6 +75,11 @@ trait Respondent
             }
         }
 
+        /**
+         * drop the status ID field.
+         */
+        unset($response['status_id']);
+
         return $response;
     }
 
