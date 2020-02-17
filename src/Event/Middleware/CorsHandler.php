@@ -9,8 +9,6 @@
 namespace MisfitPixel\Event\Middleware;
 
 
-//use App\Entity\OauthToken;
-use MisfitPixel\Entity\OauthTokenType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,24 +47,10 @@ class CorsHandler
                 'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, OPTIONS',
                 'Access-Control-Allow-Headers' => 'Origin, x-requested-with, Authorization, Content-Type, Content-Range, Content-Disposition, Content-Description',
                 'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
-                'Pragma' => 'no-cache',
-                'Content-Type' => 'application/json;charset=UTF-8'
+                'Pragma' => 'no-cache'
             ]));
         }
 
-        /**
-         * capture the token and assign it to the request.
-         * TODO: better way to get class name? (App\Entity\OauthToken)
-         */
-        /*$token = $this->container->get('doctrine')->getRepository('App\Entity\OauthToken')
-            ->findOneBy([
-                'token' => $event->getRequest()->headers->get('Authorization'),
-                'oauthTokenType' => OauthTokenType::ACCESS_TOKEN
-            ])
-        ;
-
-        $event->getRequest()->attributes->set('oauth_token', $token);
-*/
         return;
     }
 
@@ -81,8 +65,7 @@ class CorsHandler
             'Access-Control-Allow-Methods' => 'POST, GET, PUT, DELETE, OPTIONS',
             'Access-Control-Allow-Headers' => 'Origin, x-requested-with, Authorization, Content-Type, Content-Range, Content-Disposition, Content-Description',
             'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
-            'Pragma' => 'no-cache',
-            'Content-Type' => 'application/json;charset=UTF-8'
+            'Pragma' => 'no-cache'
         ]);
 
         $event->setResponse($response);
