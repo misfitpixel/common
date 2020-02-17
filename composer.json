@@ -15,7 +15,8 @@
         "symfony/orm-pack": "^1.0",
         "twig/twig": "^2.0",
         "symfony/yaml": "^5.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "swiftmailer/swiftmailer": "^6.2"
     },
     "autoload": {
         "psr-4": {
