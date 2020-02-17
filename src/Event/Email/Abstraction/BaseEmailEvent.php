@@ -8,6 +8,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Twig\Environment;
 
+/**
+ * Class BaseEmailEvent
+ * @package MisfitPixel\Event\Email\Abstraction
+ */
 abstract class BaseEmailEvent
 {
     /** @var ContainerInterface */
