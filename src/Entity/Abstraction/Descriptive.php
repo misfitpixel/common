@@ -36,9 +36,9 @@ trait Descriptive
         global $kernel;
 
         /** @var Meta $meta */
-        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaEntityName())
+        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaClassName())
             ->findOneBy([
-                strtolower(str_replace('App\Entity\\', '', self::class)) => $this->getId(),
+                $this->getRootEntityName() => $this->getId(),
                 'field' => $field
             ])
         ;
@@ -59,10 +59,10 @@ trait Descriptive
         global $kernel;
 
         /** @var Meta $meta */
-        $meta = new ($this->getMetaEntityName());
+        $meta = new ($this->getMetaClassName());
 
         if($override) {
-            $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaEntityName())
+            $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaClassName())
                 ->findOneBy([
                     $this->getRootEntityName() => $this->getId(),
                     'field' => $field
@@ -70,7 +70,7 @@ trait Descriptive
             ;
 
             if($meta === null) {
-                $meta = new ($this->getMetaEntityName());
+                $meta = new ($this->getMetaClassName());
             }
         }
 
@@ -107,7 +107,7 @@ trait Descriptive
         /**
          * build the entire metadata tree for this resource.
          */
-        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaEntityName())
+        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaClassName())
             ->findBy([
                 $this->getRootEntityName() => $this->getId(),
             ])
@@ -147,5 +147,13 @@ trait Descriptive
     public function getMetaEntityName(): string
     {
         return sprintf('%sMeta', ucfirst(self::class));
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaClassName(): string
+    {
+        return sprintf('App\Entity\%s', $this->getMetaEntityName());
     }
 }
