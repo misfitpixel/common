@@ -9,7 +9,6 @@
 namespace MisfitPixel\Entity\Abstraction;
 
 
-use MisfitPixel\Entity\Abstraction\Meta;
 use Symfony\Component\HttpKernel\Kernel;
 
 /**
@@ -36,10 +35,8 @@ trait Descriptive
         /** @var Kernel $kernel */
         global $kernel;
 
-        $metaEntity = sprintf('%sMeta', ucfirst(self::class));
-
         /** @var Meta $meta */
-        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($metaEntity)
+        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaEntityName())
             ->findOneBy([
                 strtolower(str_replace('App\Entity\\', '', self::class)) => $this->getId(),
                 'field' => $field
@@ -47,6 +44,49 @@ trait Descriptive
         ;
 
         return (!$return) ? $meta : (($meta != null) ? $meta->getValue1() : null);
+    }
+
+    /**
+     * @param string $field
+     * @param string $value1
+     * @param string|null $value2
+     * @param bool $override
+     * @return $this
+     */
+    public function setMeta(string $field, string $value1, string $value2 = null, bool $override = true): self
+    {
+        /** @var Kernel $kernel */
+        global $kernel;
+
+        /** @var Meta $meta */
+        $meta = new ($this->getMetaEntityName());
+
+        if($override) {
+            $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaEntityName())
+                ->findOneBy([
+                    $this->getEntityName() => $this->getId(),
+                    'field' => $field
+                ])
+            ;
+
+            if($meta === null) {
+                $meta = new ($this->getMetaEntityName());
+            }
+        }
+
+        $method = sprintf('set%s', ucfirst($this->getEntityName()));
+
+        /**
+         * save record.
+         */
+        $meta->$method($this)
+            ->setField($field)
+            ->setValue1($value1)
+            ->setValue2($value2)
+            ->save()
+        ;
+
+        return $this;
     }
 
     /**
@@ -62,15 +102,14 @@ trait Descriptive
             return $this->metaTree;
         }
 
-        $metaEntity = sprintf('%sMeta', ucfirst(self::class));
         $metaTree = [];
 
         /**
          * build the entire metadata tree for this resource.
          */
-        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($metaEntity)
+        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaEntityName())
             ->findBy([
-                strtolower(str_replace('App\Entity\\', '', self::class)) => $this->getId(),
+                $this->getEntityName() => $this->getId(),
             ])
         ;
 
@@ -92,5 +131,21 @@ trait Descriptive
         $this->metaTree = $metaTree;
 
         return $this->metaTree;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityName(): string
+    {
+        return strtolower(str_replace('App\Entity\\', '', self::class));
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaEntityName(): string
+    {
+        return sprintf('%sMeta', ucfirst(self::class));
     }
 }
