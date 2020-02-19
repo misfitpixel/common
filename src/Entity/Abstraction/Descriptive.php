@@ -64,7 +64,7 @@ trait Descriptive
         if($override) {
             $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaEntityName())
                 ->findOneBy([
-                    $this->getEntityName() => $this->getId(),
+                    $this->getRootEntityName() => $this->getId(),
                     'field' => $field
                 ])
             ;
@@ -74,7 +74,7 @@ trait Descriptive
             }
         }
 
-        $method = sprintf('set%s', ucfirst($this->getEntityName()));
+        $method = sprintf('set%s', ucfirst($this->getRootEntityName()));
 
         /**
          * save record.
@@ -109,7 +109,7 @@ trait Descriptive
          */
         $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaEntityName())
             ->findBy([
-                $this->getEntityName() => $this->getId(),
+                $this->getRootEntityName() => $this->getId(),
             ])
         ;
 
@@ -136,7 +136,7 @@ trait Descriptive
     /**
      * @return string
      */
-    public function getEntityName(): string
+    public function getRootEntityName(): string
     {
         return strtolower(str_replace('App\Entity\\', '', self::class));
     }
