@@ -35,10 +35,12 @@ trait Descriptive
         /** @var Kernel $kernel */
         global $kernel;
 
+        $metaEntity = sprintf('%sMeta', ucfirst(self::class));
+
         /** @var Meta $meta */
-        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaClassName())
+        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($metaEntity)
             ->findOneBy([
-                $this->getRootEntityName() => $this->getId(),
+                strtolower(str_replace('App\Entity\\', '', self::class)) => $this->getId(),
                 'field' => $field
             ])
         ;
@@ -46,23 +48,19 @@ trait Descriptive
         return (!$return) ? $meta : (($meta != null) ? $meta->getValue1() : null);
     }
 
-    /**
-     * @param string $field
-     * @param string $value1
-     * @param string|null $value2
-     * @param bool $override
-     * @return $this
-     */
     public function setMeta(string $field, string $value1, string $value2 = null, bool $override = true): self
     {
         /** @var Kernel $kernel */
         global $kernel;
 
+        $className = $this->getMetaClassName();
+        $methodName = sprintf('set%s', ucfirst($this->getRootEntityName()));
+
         /** @var Meta $meta */
-        $meta = new ($this->getMetaClassName());
+        $meta = new $className;
 
         if($override) {
-            $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaClassName())
+            $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($className)
                 ->findOneBy([
                     $this->getRootEntityName() => $this->getId(),
                     'field' => $field
@@ -70,16 +68,11 @@ trait Descriptive
             ;
 
             if($meta === null) {
-                $meta = new ($this->getMetaClassName());
+                $meta = new $className;
             }
         }
 
-        $method = sprintf('set%s', ucfirst($this->getRootEntityName()));
-
-        /**
-         * save record.
-         */
-        $meta->$method($this)
+        $meta->$methodName($this)
             ->setField($field)
             ->setValue1($value1)
             ->setValue2($value2)
@@ -102,14 +95,15 @@ trait Descriptive
             return $this->metaTree;
         }
 
+        $metaEntity = sprintf('%sMeta', ucfirst(self::class));
         $metaTree = [];
 
         /**
          * build the entire metadata tree for this resource.
          */
-        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($this->getMetaClassName())
+        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($metaEntity)
             ->findBy([
-                $this->getRootEntityName() => $this->getId(),
+                strtolower(str_replace('App\Entity\\', '', self::class)) => $this->getId(),
             ])
         ;
 
@@ -144,16 +138,8 @@ trait Descriptive
     /**
      * @return string
      */
-    public function getMetaEntityName(): string
-    {
-        return sprintf('%sMeta', ucfirst(self::class));
-    }
-
-    /**
-     * @return string
-     */
     public function getMetaClassName(): string
     {
-        return sprintf('App\Entity\%s', $this->getMetaEntityName());
+        return sprintf('%sMeta', ucfirst(self::class));
     }
 }
