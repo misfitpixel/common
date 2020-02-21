@@ -171,17 +171,17 @@ class OauthValidator
     }
 
     /**
-     * @param string $route
+     * @param string $routeIdentifier
      * @return Route|null
      */
-    private function getRouteConfig(string $route): ?Route
+    private function getRouteConfig(?string $routeIdentifier): ?Route
     {
         try {
             $route = (new YamlFileLoader(
                 new FileLocator(
                     sprintf('%s/config', $this->container->getParameter('kernel.project_dir'))
                 )
-            ))->load('routes.yaml')->get($route);
+            ))->load('routes.yaml')->get($routeIdentifier);
 
         } catch(ParseException $e) {
             $route = null;
