@@ -40,7 +40,11 @@ class OauthValidator
         /**
          * load the route config.
          */
-        $route = $this->getRouteConfig($event->getRequest()->get('_route'));
+        if(($routeIdentifier = $event->getRequest()->get('_route')) == null ) {
+            return;
+        }
+
+        $route = $this->getRouteConfig($routeIdentifier);
 
         /**
          * skip if no route found.
@@ -174,7 +178,7 @@ class OauthValidator
      * @param string $routeIdentifier
      * @return Route|null
      */
-    private function getRouteConfig(?string $routeIdentifier): ?Route
+    private function getRouteConfig(string $routeIdentifier): ?Route
     {
         try {
             $route = (new YamlFileLoader(
