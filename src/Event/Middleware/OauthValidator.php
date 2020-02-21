@@ -82,7 +82,7 @@ class OauthValidator
         }
 
         if(!$isScoped) {
-            throw new Exception\UnauthorizedException();
+            throw new Exception\ForbiddenException();
         }
     }
 
