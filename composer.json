@@ -16,7 +16,8 @@
         "twig/twig": "^2.0",
         "symfony/yaml": "^5.0",
         "ext-json": "*",
-        "swiftmailer/swiftmailer": "^6.2"
+        "swiftmailer/swiftmailer": "^6.2",
+        "ext-curl": "*"
     },
     "autoload": {
         "psr-4": {
