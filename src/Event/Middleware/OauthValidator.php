@@ -38,9 +38,21 @@ class OauthValidator
     public function execute(RequestEvent $event)
     {
         /**
-         * prevent circular reference.
+         * load the route config.
          */
-        if($event->getRequest()->get('_route') === 'oauth_validate') {
+        $route = $this->getRouteConfig($event->getRequest()->get('_route'));
+
+        /**
+         * skip if no route found.
+         */
+        if($route == null) {
+            return;
+        }
+
+        /**
+         * skip check for routes with empty or missing oauth_scopes.
+         */
+        if($route->getOption('oauth_scopes') == null) {
             return;
         }
 
@@ -57,18 +69,6 @@ class OauthValidator
             $isScoped = true;
 
         } else {
-            /**
-             * load the route config.
-             */
-            $route = $this->getRouteConfig($event->getRequest()->get('_route'));
-
-            /**
-             * skip if no route found.
-             */
-            if($route == null) {
-                return;
-            }
-
             /**
              * verify all the required scopes for the route are attached to the token details.
              */
