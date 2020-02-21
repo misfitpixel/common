@@ -77,6 +77,7 @@ class ExceptionController
             $event->setResponse(new Response($this->twig->render($exception->getTemplate(), [
                 'status_code' => $exception->getStatusCode(),
                 'message' => $exception->getMessage(),
+                'data' => $exception->getData()
             ]), $exception->getStatusCode(), $exception->getHeaders()));
         }
     }
