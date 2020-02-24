@@ -140,6 +140,9 @@ class OauthValidator
             case Response::HTTP_NO_CONTENT:
                 break;
 
+            case Response::HTTP_FORBIDDEN:
+                throw new Exception\ForbiddenException();
+
             default:
                 throw new Exception\UnknownErrorException();
         }
