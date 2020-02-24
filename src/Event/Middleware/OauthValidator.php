@@ -63,7 +63,7 @@ class OauthValidator
         /**
          * get the token details from the accounts service.
          */
-        $data = $this->getTokenDetails($event->getRequest()->headers->get('Authorization'));
+        $data = $this->getTokenDetails(trim(str_replace('Bearer', '', $event->getRequest()->headers->get('Authorization'))));
         $isScoped = true;
 
         /**
@@ -100,7 +100,7 @@ class OauthValidator
 
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            sprintf('Authorization: %s', $token)
+            sprintf('Authorization: Bearer %s', $token)
         ]);
 
         curl_setopt($ch, CURLOPT_URL, 'http://accounts.mtgbracket.com/oauth/validate');
