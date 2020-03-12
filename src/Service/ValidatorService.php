@@ -177,7 +177,7 @@ class ValidatorService
                     if(
                         in_array($params['type'], ['array', 'object']) &&
                         (
-                            !isset($params['schema']) ||
+                            isset($params['schema']) &&
                             !isset($schema[$params['schema']])
                         )
                     ) {
@@ -192,7 +192,8 @@ class ValidatorService
                      */
                     if(
                         in_array($params['type'], ['array']) &&
-                        is_array($node[$field])
+                        is_array($node[$field]) &&
+                        isset($params['schema'])
                     ) {
                         foreach($node[$field] as $index => $item) {
                             $this->validateNode($item, $schema[$params['schema']], $schema, $params['schema']);
@@ -201,7 +202,8 @@ class ValidatorService
 
                     if(
                         in_array($params['type'], ['object']) &&
-                        is_array($node[$field])
+                        is_array($node[$field]) &&
+                        isset($params['schema'])
                     ) {
                         $this->validateNode($node[$field], $schema[$params['schema']], $schema, $params['schema']);
                     }
