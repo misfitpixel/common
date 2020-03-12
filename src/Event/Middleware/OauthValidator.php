@@ -5,10 +5,10 @@ namespace MisfitPixel\Event\Middleware;
 
 
 use MisfitPixel\Exception;
+use MisfitPixel\Service\OauthService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Yaml\Exception\ParseException;
@@ -22,13 +22,18 @@ class OauthValidator
     /** @var ContainerInterface  */
     private $container;
 
+    /** @var OauthService  */
+    private $oauthService;
+
     /**
      * OauthValidator constructor.
      * @param ContainerInterface $container
+     * @param OauthService $oauthService
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, OauthService $oauthService)
     {
         $this->container = $container;
+        $this->oauthService = $oauthService;
     }
 
     /**
@@ -63,8 +68,13 @@ class OauthValidator
         /**
          * get the token details from the accounts service.
          */
-        $data = $this->getTokenDetails(trim(str_replace('Bearer', '', $event->getRequest()->headers->get('Authorization'))));
+        $data = $this->oauthService->getTokenDetails(trim(str_replace('Bearer', '', $event->getRequest()->headers->get('Authorization'))));
         $isScoped = true;
+
+        /**
+         * attach the token data to the request.
+         */
+        $event->getRequest()->attributes->set('oauth_token', $data);
 
         /**
          * if root client, skip this process.
@@ -88,66 +98,6 @@ class OauthValidator
         if(!$isScoped) {
             throw new Exception\ForbiddenException();
         }
-    }
-
-    /**
-     * @param string $token
-     * @return array
-     */
-    private function getTokenDetails(string $token): array
-    {
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            sprintf('Authorization: Bearer %s', $token)
-        ]);
-
-        curl_setopt($ch, CURLOPT_URL, 'http://accounts.mtgbracket.com/oauth/validate');
-
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FAILONERROR, false);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
-
-        $result = (curl_exec($ch));
-        $errorCode = curl_errno($ch);
-        $info = curl_getinfo($ch);
-
-        curl_close($ch);
-
-        switch($errorCode) {
-            case CURLE_OK:
-                break;
-
-            case CURLE_OPERATION_TIMEOUTED:
-                throw new Exception\TimeoutException('Could not connect to accounts service');
-
-                break;
-
-            default:
-                throw new Exception\UnknownErrorException('Error encountered during api request');
-
-                break;
-        }
-
-        switch($info['http_code']){
-            case Response::HTTP_OK:
-            case Response::HTTP_ACCEPTED:
-            case Response::HTTP_NO_CONTENT:
-                break;
-
-            case Response::HTTP_FORBIDDEN:
-                throw new Exception\ForbiddenException();
-
-            default:
-                throw new Exception\UnknownErrorException();
-        }
-
-        return ($result != null) ? json_decode($result, true) : null;
     }
 
     /**
