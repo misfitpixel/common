@@ -92,13 +92,8 @@ trait Persistent
         $dispatcher = $this->getContainer()->get('event_dispatcher');
         $dispatcher->dispatch($event, sprintf('api.%s.before_delete', strtolower($this->getEntityName())));
 
-        if($soft && method_exists($this, 'setStatus')) {
-            /** @var Entity\Status $status */
-            $status = $this->getManager()->getRepository(Entity\Status::class)
-                ->find(Entity\Status::DELETED)
-            ;
-
-            $this->setStatus($status)->save();
+        if($soft && method_exists($this, 'setStatusId')) {
+            $this->setStatusId(Entity\Status::DELETED)->save();
 
         } else {
             try {
@@ -119,13 +114,8 @@ trait Persistent
                 /**
                  * attempt to set the status instead.
                  */
-                if(method_exists($this, 'setStatus')) {
-                    /** @var Entity\Status $status */
-                    $status = $this->getManager()->getRepository(Entity\Status::class)
-                        ->find(Entity\Status::DELETED)
-                    ;
-
-                    $this->setStatus($status)->save();
+                if(method_exists($this, 'setStatusId')) {
+                    $this->setStatusId(Entity\Status::DELETED)->save();
 
                     $success = true;
                 }
