@@ -78,4 +78,12 @@ abstract class BaseRepository extends ServiceEntityRepository
 
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function findAll()
+    {
+        return parent::findBy([], null, $this->getLimit(), $this->getOffset());
+    }
 }
