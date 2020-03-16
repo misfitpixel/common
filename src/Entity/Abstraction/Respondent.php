@@ -42,7 +42,7 @@ trait Respondent
             /**
              * skip service parameters.
              */
-            if(strpos($property, 'service') !== false) {
+            if(strpos($property->getName(), 'Service') !== false) {
                 continue;
             }
 
