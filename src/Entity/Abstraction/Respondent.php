@@ -39,6 +39,13 @@ trait Respondent
 
         /** @var \ReflectionProperty $property */
         foreach($reflection->getProperties() as $property) {
+            /**
+             * skip service parameters.
+             */
+            if(strpos($property, 'service') !== false) {
+                continue;
+            }
+
             $methodName = sprintf('get%s', ucfirst($property->getName()));
 
             /**
