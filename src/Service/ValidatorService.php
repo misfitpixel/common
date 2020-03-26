@@ -81,6 +81,21 @@ class ValidatorService
          * validate required.
          */
         foreach($schemaNode as $schemaField => $rules) {
+            $nullable = (isset($rules['nullable']) && (bool)$rules['nullable']);
+
+            /**
+             * field is nullable.
+             */
+            if(
+                $nullable &&
+                (array_key_exists($schemaField, $node) && $node[$schemaField] === null)
+            ) {
+                continue;
+            }
+
+            /**
+             * field is required.
+             */
             if(
                 (bool)$rules['required'] &&
                 (!isset($node[$schemaField]) || $node[$schemaField] === null || $node[$schemaField] === "")
@@ -95,6 +110,7 @@ class ValidatorService
         foreach($node as $field => $value) {
             if(isset($schemaNode[$field])) {
                 $params = $schemaNode[$field];
+                $nullable = (isset($params['nullable']) && (bool)$params['nullable']);
 
                 /**
                  * validate enum list.
@@ -130,6 +146,24 @@ class ValidatorService
                     }
 
                     if(
+                        $params['type'] === 'boolean' &&
+                        !is_bool($node[$field])
+                    ) {
+                        throw new Exception\InvalidFieldException(sprintf('Invalid boolean field value for %s%s',
+                            ($child != null) ? sprintf('%s.', $child) : '',
+                            $field
+                        ), $field);
+                    }
+
+                    if(
+                        $params['type'] === 'int' &&
+                        $nullable &&
+                        $node[$field] === null
+                    ) {
+                        continue;
+                    }
+
+                    if(
                         $params['type'] === 'int' &&
                         (
                             !is_numeric($node[$field]) ||
@@ -143,6 +177,14 @@ class ValidatorService
                             ($child != null) ? sprintf('%s.', $child) : '',
                             $field
                         ), $field);
+                    }
+
+                    if(
+                        $params['type'] === 'float' &&
+                        $nullable &&
+                        $node[$field] === null
+                    ) {
+                        continue;
                     }
 
                     if(
@@ -164,6 +206,25 @@ class ValidatorService
                     if(
                         in_array($params['type'], ['array', 'object']) &&
                         !is_array($node[$field])
+                    ) {
+                        throw new Exception\InvalidFieldException(sprintf('Invalid field value for %s%s',
+                            ($child != null) ? sprintf('%s.', $child) : '',
+                            $field
+                        ), $field);
+                    }
+
+                    /**
+                     * verify min and/or max size of array.
+                     */
+                    if(
+                        $params['type'] === 'array' &&
+                        (
+                            !is_array($node[$field]) ||
+                            (
+                                (isset($params['min']) && sizeof($node[$field]) < $params['min']) ||
+                                (isset($params['max']) && sizeof($node[$field]) > $params['max'])
+                            )
+                        )
                     ) {
                         throw new Exception\InvalidFieldException(sprintf('Invalid field value for %s%s',
                             ($child != null) ? sprintf('%s.', $child) : '',
