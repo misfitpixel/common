@@ -48,6 +48,13 @@ trait Descriptive
         return (!$return) ? $meta : (($meta != null) ? $meta->getValue1() : null);
     }
 
+    /**
+     * @param string $field
+     * @param string $value1
+     * @param string|null $value2
+     * @param bool $override
+     * @return $this
+     */
     public function setMeta(string $field, string $value1, string $value2 = null, bool $override = true): self
     {
         /** @var Kernel $kernel */
@@ -80,6 +87,27 @@ trait Descriptive
         ;
 
         return $this;
+    }
+
+    /**
+     * @param string $field
+     * @return bool
+     */
+    public function deleteMeta(string $field)
+    {
+        /** @var Kernel $kernel */
+        global $kernel;
+
+        $className = $this->getMetaClassName();
+
+        $meta = $kernel->getContainer()->get('doctrine')->getManager()->getRepository($className)
+            ->findOneBy([
+                $this->getRootEntityName() => $this->getId(),
+                'field' => $field
+            ])
+        ;
+
+        return $meta->delete();
     }
 
     /**
