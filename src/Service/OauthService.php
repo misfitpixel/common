@@ -5,6 +5,7 @@ namespace MisfitPixel\Service;
 
 
 use MisfitPixel\Exception;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -13,20 +14,43 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class OauthService
 {
+    /** @var ContainerInterface  */
+    private $container;
+
+    /**
+     * OauthService constructor.
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * @param string $token
-     * @return array
+     * @return array|null
      */
-    public function getTokenDetails(string $token): array
+    public function getTokenDetails(string $token): ?array
     {
         $ch = curl_init();
+        $endpoint = 'accounts.mtgbracket.com';
 
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             sprintf('Authorization: Bearer %s', $token)
         ]);
 
-        curl_setopt($ch, CURLOPT_URL, 'http://accounts.mtgbracket.com/oauth/validate');
+        /**
+         * set the service endpoint based on the Kubernetes service IP.
+         */
+        if(
+            $this->container->hasParameter('microservices') &&
+            isset($this->container->getParameter('microservices')['accounts'])
+        ) {
+            $endpoint = $this->container->getParameter('microservices')['accounts'];
+        }
+
+        curl_setopt($ch, CURLOPT_URL, sprintf('http://%s/oauth/validate', $endpoint));
 
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
