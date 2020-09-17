@@ -21,6 +21,11 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 trait Persistent
 {
     /**
+     * @return int
+     */
+    public abstract function getId(): int;
+
+    /**
      * @return bool
      */
     public function save()
@@ -146,6 +151,14 @@ trait Persistent
     {
         /** @var Kernel $kernel */
         global $kernel;
+
+        /**
+         * always ensure we have a fresh manager if
+         * closed by an earlier exception.
+         */
+        if(!$kernel->getContainer()->get('doctrine')->getManager()->isOpen()) {
+            $kernel->getContainer()->get('doctrine')->resetManager();
+        }
 
         return $kernel->getContainer()->get('doctrine')->getManager();
     }
