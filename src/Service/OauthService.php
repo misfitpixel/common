@@ -45,7 +45,7 @@ class OauthService
          */
         if(
             $this->container->hasParameter('microservices') &&
-            isset($this->container->getParameter('microservices')['accounts'])
+            $this->container->getParameter('microservices')['accounts'] != null
         ) {
             $endpoint = $this->container->getParameter('microservices')['accounts'];
         }
@@ -73,12 +73,9 @@ class OauthService
             case CURLE_OPERATION_TIMEOUTED:
                 throw new Exception\TimeoutException('Could not connect to accounts service');
 
-                break;
-
             default:
                 throw new Exception\UnknownErrorException('Error encountered during api request');
 
-                break;
         }
 
         switch($info['http_code']){
