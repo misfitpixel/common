@@ -21,6 +21,14 @@ use Symfony\Component\Yaml\Yaml;
  */
 class ValidatorService
 {
+    const TYPE_STRING = 'string';
+    const TYPE_BOOLEAN = 'boolean';
+    const TYPE_INT = 'int';
+    const TYPE_FLOAT = 'float';
+    const TYPE_ARRAY = 'array';
+    const TYPE_OBJECT = 'object';
+
+
     /** @var ContainerInterface  */
     private $container;
 
@@ -132,7 +140,7 @@ class ValidatorService
                  */
                 if(isset($params['type'])) {
                     if(
-                        $params['type'] === 'string' &&
+                        $params['type'] === self::TYPE_STRING &&
                         (
                             (isset($params['min']) && strlen($node[$field]) < $params['min']) ||
                             (isset($params['max']) && strlen($node[$field]) > $params['max']) ||
@@ -146,7 +154,7 @@ class ValidatorService
                     }
 
                     if(
-                        $params['type'] === 'boolean' &&
+                        $params['type'] === self::TYPE_BOOLEAN &&
                         !is_bool($node[$field])
                     ) {
                         throw new Exception\InvalidFieldException(sprintf('Invalid boolean field value for %s%s',
@@ -156,7 +164,7 @@ class ValidatorService
                     }
 
                     if(
-                        $params['type'] === 'int' &&
+                        $params['type'] === self::TYPE_INT &&
                         $nullable &&
                         $node[$field] === null
                     ) {
@@ -164,7 +172,7 @@ class ValidatorService
                     }
 
                     if(
-                        $params['type'] === 'int' &&
+                        $params['type'] === self::TYPE_INT &&
                         (
                             !is_numeric($node[$field]) ||
                             (
@@ -180,7 +188,7 @@ class ValidatorService
                     }
 
                     if(
-                        $params['type'] === 'float' &&
+                        $params['type'] === self::TYPE_FLOAT &&
                         $nullable &&
                         $node[$field] === null
                     ) {
@@ -188,7 +196,7 @@ class ValidatorService
                     }
 
                     if(
-                        $params['type'] === 'float' &&
+                        $params['type'] === self::TYPE_FLOAT &&
                         (
                             !is_numeric($node[$field]) ||
                             (
@@ -204,7 +212,7 @@ class ValidatorService
                     }
 
                     if(
-                        in_array($params['type'], ['array', 'object']) &&
+                        in_array($params['type'], [self::TYPE_ARRAY, self::TYPE_OBJECT]) &&
                         !is_array($node[$field])
                     ) {
                         throw new Exception\InvalidFieldException(sprintf('Invalid field value for %s%s',
@@ -217,7 +225,7 @@ class ValidatorService
                      * verify min and/or max size of array.
                      */
                     if(
-                        $params['type'] === 'array' &&
+                        $params['type'] === self::TYPE_ARRAY &&
                         (
                             !is_array($node[$field]) ||
                             (
@@ -236,7 +244,7 @@ class ValidatorService
                      * verify that the child schema is valid.
                      */
                     if(
-                        in_array($params['type'], ['array', 'object']) &&
+                        in_array($params['type'], [self::TYPE_ARRAY, self::TYPE_OBJECT]) &&
                         (
                             isset($params['schema']) &&
                             !isset($schema[$params['schema']])
@@ -252,7 +260,7 @@ class ValidatorService
                      * validate child schema.
                      */
                     if(
-                        in_array($params['type'], ['array']) &&
+                        in_array($params['type'], [self::TYPE_ARRAY]) &&
                         is_array($node[$field]) &&
                         isset($params['schema'])
                     ) {
@@ -262,7 +270,7 @@ class ValidatorService
                     }
 
                     if(
-                        in_array($params['type'], ['object']) &&
+                        in_array($params['type'], [self::TYPE_OBJECT]) &&
                         is_array($node[$field]) &&
                         isset($params['schema'])
                     ) {
