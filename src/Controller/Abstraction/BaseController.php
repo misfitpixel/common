@@ -48,4 +48,22 @@ abstract class BaseController
     {
         return ($request->query->has('limit')) ? $request->query->get('limit') : $limit;
     }
+
+    /**
+     * @param Request $request
+     * @param array $order
+     * @return array
+     */
+    public function getOrder(Request $request, array $order = []): array
+    {
+        if($request->query->has('order')) {
+            $parts = explode(':', $request->query->get('order'));
+
+            if(sizeof($parts) === 2) {
+                $order = [$parts[0] => $parts[1]];
+            }
+        }
+
+        return $order;
+    }
 }
