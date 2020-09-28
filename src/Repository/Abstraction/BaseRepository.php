@@ -11,6 +11,7 @@ namespace MisfitPixel\Repository\Abstraction;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use MisfitPixel\Exception\BadRequestException;
 
 /**
  * Class BaseRepository
@@ -24,6 +25,9 @@ abstract class BaseRepository extends ServiceEntityRepository
 
     /** @var int */
     private $limit;
+
+    /** @var array */
+    private $order;
 
     /**
      * BaseRepository constructor.
@@ -75,6 +79,35 @@ abstract class BaseRepository extends ServiceEntityRepository
     public function setLimit(?int $limit): self
     {
         $this->limit = $limit;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOrder(): array
+    {
+        return $this->order;
+    }
+
+    /**
+     * @param array|null $order
+     * @return $this
+     */
+    public function setOrder(?array $order): self
+    {
+        if($order === null) {
+            $this->order = [];
+        }
+
+        foreach($order as $field => $direction) {
+            if(!in_array(strtolower($direction), ['asc', 'desc'])) {
+                throw new BadRequestException('Sort order direction must be one-of: \'asc\' or \'desc\' ');
+            }
+        }
+
+        $this->order = $order;
 
         return $this;
     }
