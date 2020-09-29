@@ -7,10 +7,10 @@ namespace MisfitPixel\Service\Abstraction;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Class SearchService
+ * Class BaseSearchService
  * @package MisfitPixel\Service\Abstraction
  */
-abstract class SearchService
+abstract class BaseSearchService
 {
     /** @var EntityManagerInterface  */
     private $manager;
