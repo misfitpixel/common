@@ -25,9 +25,13 @@ abstract class SearchService
     }
 
     /**
+     * @param string $query
+     * @param int $offset
+     * @param int $limit
+     * @param array $order
      * @return array
      */
-    public abstract function search(): array;
+    public abstract function search(string $query, int $offset, int $limit, array $order = []): array;
 
     /**
      * @param array $criteria
