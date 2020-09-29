@@ -64,4 +64,12 @@ abstract class SearchService
 
         return $sql;
     }
+
+    /**
+     * @return EntityManagerInterface
+     */
+    protected function getManager(): EntityManagerInterface
+    {
+        return $this->manager;
+    }
 }
