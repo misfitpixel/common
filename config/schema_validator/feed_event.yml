@@ -1,0 +1,30 @@
+root:
+    user_id:
+        required: true
+        type: int
+        min: 0
+
+    target_id:
+        required: true
+        type: int
+        min: 0
+        nullable: true
+
+    template:
+        required: true
+        type: string
+
+    message:
+        required: true
+        type: string
+        nullable: true
+
+    data:
+        required: true
+        type: string
+        nullable: true
+
+    date_created:
+        required: true
+        type: int
+        min: 0

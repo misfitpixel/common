@@ -10,6 +10,8 @@ namespace MisfitPixel\Event;
 
 
 use MisfitPixel\Service\ValidatorService;;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
@@ -18,6 +20,9 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class SchemaValidator
 {
+    /** @var ContainerInterface  */
+    private $container;
+
     /**
      * @var ValidatorService
      */
@@ -25,10 +30,12 @@ class SchemaValidator
 
     /**
      * SchemaValidator constructor.
+     * @param ContainerInterface $container
      * @param ValidatorService $validator
      */
-    public function __construct(ValidatorService $validator)
+    public function __construct(ContainerInterface $container, ValidatorService $validator)
     {
+        $this->container = $container;
         $this->validator = $validator;
     }
 
@@ -38,6 +45,12 @@ class SchemaValidator
      */
     public function execute(RequestEvent $event)
     {
-        $this->validator->validate($event->getRequest());
+        $this->validator->validate(
+            json_decode($event->getRequest()->getContent(), true),
+            sprintf('%s/config/schema_validator/%s.yml',
+                $this->container->get('kernel')->getProjectDir(),
+                $event->getRequest()->get('_route')
+            )
+        );
     }
 }

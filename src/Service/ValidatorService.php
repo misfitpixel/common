@@ -42,14 +42,13 @@ class ValidatorService
     }
 
     /**
-     * @param Request $request
+     * @param array $data
+     * @param string $schemaName
      * @return bool
      * @throws \Exception
      */
-    public function validate(Request $request): bool
+    public function validate(array $data, string $schemaName): bool
     {
-        $data = json_decode($request->getContent(), true);
-
         if($data === null) {
             return false;
         }
@@ -58,10 +57,7 @@ class ValidatorService
             /**
              * load the schema file.
              */
-            $schema = Yaml::parseFile(sprintf('%s/config/schema_validator/%s.yml',
-                $this->container->get('kernel')->getProjectDir(),
-                $request->get('_route')
-            ));
+            $schema = Yaml::parseFile($schemaName);
 
             if($schema == null) {
                 return true;
