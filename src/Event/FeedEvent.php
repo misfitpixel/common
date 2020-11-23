@@ -74,8 +74,7 @@ class FeedEvent
          * publish message.
          */
         $client->topic('feed-events')->publish([
-            'data' => json_encode($data),
-            'attributes' => []
+            'data' => json_encode($data)
         ]);
     }
 }
