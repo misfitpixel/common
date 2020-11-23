@@ -42,12 +42,12 @@ class ValidatorService
     }
 
     /**
-     * @param array $data
+     * @param array|null $data
      * @param string $schemaName
      * @return bool
      * @throws \Exception
      */
-    public function validate(array $data, string $schemaName): bool
+    public function validate(?array $data, string $schemaName): bool
     {
         if($data === null) {
             return false;
