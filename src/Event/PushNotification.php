@@ -38,8 +38,12 @@ class PushNotification
     public function execute(GenericEvent $event)
     {
         $data = $event->getSubject();
+        $endpoint = $event->getArgument('endpoint');
 
-        if(!is_array($data)) {
+        if(
+            !is_array($data) ||
+            $endpoint == null
+        ) {
             return;
         }
 
@@ -73,7 +77,7 @@ class PushNotification
         $client->topic('push-notifications')->publish([
             'data' => json_encode($data),
             'attributes' => [
-                'endpoint' => $data['token']
+                'endpoint' => $endpoint
             ]
         ]);
     }
