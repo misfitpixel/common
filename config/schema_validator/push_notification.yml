@@ -1,0 +1,26 @@
+root:
+    token:
+        required: true
+        type: string
+
+    notification:
+        required: true
+        type: object
+        schema: notification
+
+    data:
+        required: false
+        nullable: true
+        type: object
+
+notification:
+    title:
+        required: true
+        nullable: true
+        type: string
+
+    body:
+        required: true
+        nullable: true
+        type: string
+
