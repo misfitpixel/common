@@ -59,7 +59,7 @@ abstract class BaseSearchService
                 continue;
             }
 
-            $sql .= sprintf("%s %s", $column, $direction);
+            $sql .= sprintf("q.%s %s", $column, $direction);
         }
 
         return $sql;
