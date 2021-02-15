@@ -10,7 +10,7 @@ namespace MisfitPixel\Repository\Abstraction;
 
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use MisfitPixel\Exception\BadRequestException;
 
 /**
@@ -31,9 +31,9 @@ abstract class BaseRepository extends ServiceEntityRepository
 
     /**
      * BaseRepository constructor.
-     * @param ManagerRegistry $registry
+     * @param Registry $registry
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(Registry $registry)
     {
         $this->offset = 0;
 
