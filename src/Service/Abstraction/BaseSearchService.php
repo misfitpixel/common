@@ -5,6 +5,7 @@ namespace MisfitPixel\Service\Abstraction;
 
 
 use Doctrine\ORM\EntityManagerInterface;
+use MisfitPixel\Exception\BadRequestException;
 
 /**
  * Class BaseSearchService
@@ -59,11 +60,23 @@ abstract class BaseSearchService
                 continue;
             }
 
+            /**
+             * confirm that provided column is acceptable for this resource.
+             */
+            if(!in_array($column, $this->getSortColumns())) {
+                throw new BadRequestException(sprintf("'%s' is not a valid field for ordering", $column));
+            }
+
             $sql .= sprintf("q.%s %s", $column, $direction);
         }
 
         return $sql;
     }
+
+    /**
+     * @return array
+     */
+    abstract protected function getSortColumns(): array;
 
     /**
      * @return EntityManagerInterface
