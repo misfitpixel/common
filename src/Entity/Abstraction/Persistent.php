@@ -47,23 +47,25 @@ trait Persistent
                 }
             }
 
+            /**
+             * prepare event dispatcher.
+             */
             $event = new GenericEvent($this);
             $event->setArgument('previousValues', $previousValues);
 
+            /** @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher */
+            $dispatcher = $this->getContainer()->get('event_dispatcher');
+
             /**
              * fire before_insert or before_update events.
-             * @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
              **/
-            $dispatcher = $this->getContainer()->get('event_dispatcher');
             $dispatcher->dispatch($event, sprintf('api.%s.before_%s', strtolower($this->getEntityName()), $action));
 
             $this->getManager()->flush();
 
             /**
              * fire after_insert or after_update events.
-             * @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
              */
-            $dispatcher = $this->getContainer()->get('event_dispatcher');
             $dispatcher->dispatch($event, sprintf('api.%s.after_%s', strtolower($this->getEntityName()), $action));
 
         } catch(\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
