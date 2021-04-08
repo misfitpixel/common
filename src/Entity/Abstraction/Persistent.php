@@ -28,7 +28,7 @@ trait Persistent
     /**
      * @return bool
      */
-    public function save()
+    public function save(): bool
     {
         $success = true;
         $action = ($this->getId() === null) ? 'insert' : 'update';
@@ -47,15 +47,22 @@ trait Persistent
                 }
             }
 
+            $event = new GenericEvent($this);
+            $event->setArgument('previousValues', $previousValues);
+
+            /**
+             * fire before_insert or before_update events.
+             * @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
+             **/
+            $dispatcher = $this->getContainer()->get('event_dispatcher');
+            $dispatcher->dispatch($event, sprintf('api.%s.before_%s', strtolower($this->getEntityName()), $action));
+
             $this->getManager()->flush();
 
             /**
              * fire after_insert or after_update events.
+             * @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher
              */
-            $event = new GenericEvent($this);
-            $event->setArgument('previousValues', $previousValues);
-
-            /** @var \Symfony\Component\EventDispatcher\EventDispatcher $dispatcher */
             $dispatcher = $this->getContainer()->get('event_dispatcher');
             $dispatcher->dispatch($event, sprintf('api.%s.after_%s', strtolower($this->getEntityName()), $action));
 
@@ -84,7 +91,7 @@ trait Persistent
      * @param bool $soft
      * @return bool
      */
-    public function delete(bool $soft = false)
+    public function delete(bool $soft = false): bool
     {
         $success = true;
 
@@ -145,9 +152,9 @@ trait Persistent
     }
 
     /**
-     * @return \Doctrine\ORM\EntityManager
+     * @return \Doctrine\ORM\EntityManagerInterface
      */
-    protected function getManager()
+    protected function getManager(): \Doctrine\ORM\EntityManagerInterface
     {
         /** @var Kernel $kernel */
         global $kernel;
@@ -166,7 +173,7 @@ trait Persistent
     /**
      * @return null|\Symfony\Component\DependencyInjection\ContainerInterface
      */
-    protected function getContainer()
+    protected function getContainer(): ?\Symfony\Component\DependencyInjection\ContainerInterface
     {
         /** @var Kernel $kernel */
         global $kernel;
@@ -177,7 +184,7 @@ trait Persistent
     /**
      * @return string
      */
-    protected function getEntityName()
+    protected function getEntityName(): string
     {
         return str_replace('App\Entity\\', '', self::class);
     }
