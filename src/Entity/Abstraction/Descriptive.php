@@ -18,12 +18,12 @@ use Symfony\Component\HttpKernel\Kernel;
 trait Descriptive
 {
     /** @var array */
-    private $metaTree;
+    private array $metaTree;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public abstract function getId(): int;
+    public abstract function getId(): ?int;
 
     /**
      * @param string $field
@@ -93,7 +93,7 @@ trait Descriptive
      * @param string $field
      * @return bool
      */
-    public function deleteMeta(string $field)
+    public function deleteMeta(string $field): bool
     {
         /** @var Kernel $kernel */
         global $kernel;

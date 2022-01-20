@@ -16,9 +16,9 @@ namespace MisfitPixel\Entity\Abstraction;
 trait Respondent
 {
     /**
-     * @return int
+     * @return int|null
      */
-    public abstract function getId(): int;
+    public abstract function getId(): ?int;
 
     /**
      * @return array

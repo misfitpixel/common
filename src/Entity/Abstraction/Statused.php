@@ -19,10 +19,10 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 trait Statused
 {
     /** @var int */
-    private $statusId;
+    private int $statusId;
 
     /** @var Status */
-    private $status;
+    private Status $status;
 
     /**
      * @return int
