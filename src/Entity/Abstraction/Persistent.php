@@ -21,9 +21,9 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 trait Persistent
 {
     /**
-     * @return int
+     * @return int|null
      */
-    public abstract function getId(): int;
+    public abstract function getId(): ?int;
 
     /**
      * @return bool
