@@ -9,9 +9,9 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.4",
         "doctrine/orm": "*",
-        "symfony/framework-bundle": "^5.0.0",
+        "symfony/framework-bundle": "5.4.2",
         "symfony/orm-pack": "^1.0",
         "twig/twig": "^2.0",
         "symfony/yaml": "^5.0",
