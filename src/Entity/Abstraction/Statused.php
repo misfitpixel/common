@@ -18,8 +18,8 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  */
 trait Statused
 {
-    /** @var int */
-    private int $statusId;
+    /** @var int|null  */
+    private ?int $statusId = null;
 
     /** @var Status */
     private Status $status;
