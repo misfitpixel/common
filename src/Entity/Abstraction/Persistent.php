@@ -158,18 +158,18 @@ trait Persistent
      */
     protected function getManager(): \Doctrine\ORM\EntityManagerInterface
     {
-        /** @var Kernel $kernel */
-        global $kernel;
+        /** @var Kernel $app */
+        global $app;
 
         /**
          * always ensure we have a fresh manager if
          * closed by an earlier exception.
          */
-        if(!$kernel->getContainer()->get('doctrine')->getManager()->isOpen()) {
-            $kernel->getContainer()->get('doctrine')->resetManager();
+        if(!$app->getContainer()->get('doctrine')->getManager()->isOpen()) {
+            $app->getContainer()->get('doctrine')->resetManager();
         }
 
-        return $kernel->getContainer()->get('doctrine')->getManager();
+        return $app->getContainer()->get('doctrine')->getManager();
     }
 
     /**
@@ -177,10 +177,10 @@ trait Persistent
      */
     protected function getContainer(): ?\Symfony\Component\DependencyInjection\ContainerInterface
     {
-        /** @var Kernel $kernel */
-        global $kernel;
+        /** @var Kernel $app */
+        global $app;
 
-        return $kernel->getContainer();
+        return $app->getContainer();
     }
 
     /**
