@@ -9,6 +9,7 @@
 namespace MisfitPixel\Controller\Abstraction;
 
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,20 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
  * Class BaseController
  * @package Controller\Abstraction
  */
-abstract class BaseController
+abstract class BaseController extends AbstractController
 {
-    /** @var ContainerInterface  */
-    protected $container;
-
-    /**
-     * BaseController constructor.
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
     /**
      * @param Request $request
      * @return int
