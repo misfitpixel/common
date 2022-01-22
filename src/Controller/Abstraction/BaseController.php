@@ -9,8 +9,8 @@
 namespace MisfitPixel\Controller\Abstraction;
 
 
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -19,6 +19,17 @@ use Symfony\Component\HttpFoundation\Request;
  */
 abstract class BaseController extends AbstractController
 {
+    /** @var ManagerRegistry  */
+    private ManagerRegistry $manager;
+
+    /**
+     * @param ManagerRegistry $manager
+     */
+    public function __construct(ManagerRegistry $manager)
+    {
+        $this->manager = $manager;
+    }
+
     /**
      * @param Request $request
      * @return int
