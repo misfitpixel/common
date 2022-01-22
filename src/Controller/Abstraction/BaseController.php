@@ -31,6 +31,14 @@ abstract class BaseController extends AbstractController
     }
 
     /**
+     * @return ManagerRegistry
+     */
+    public function getManager(): ManagerRegistry
+    {
+        return $this->manager;
+    }
+
+    /**
      * @param Request $request
      * @return int
      */
