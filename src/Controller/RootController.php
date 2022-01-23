@@ -28,9 +28,17 @@ class RootController extends AbstractController
     {
         $version = shell_exec('git describe --tags `git rev-list --tags --max-count=1`');
         $documentationUrl = null;
+        $message = null;
 
         try {
-            $documentationUrl = $this->getParameter('misfitpixel.common.documentation_url');
+            $documentationUrl = $this->getParameter('misfitpixel.common.documentation.url');
+
+        } catch(InvalidArgumentException $e) {
+            // do nothing.
+        }
+
+        try {
+            $message = $this->getParameter('misfitpixel.common.documentation.message');
 
         } catch(InvalidArgumentException $e) {
             // do nothing.
@@ -39,7 +47,7 @@ class RootController extends AbstractController
         return new JsonResponse([
             'version' => ($version != null) ? $version : 'Development',
             'documentation_url' => $documentationUrl,
-            'message' => 'Welcome to mtgbracket! Interested in working with our API? Take a look at the developer resources and get started!'
+            'message' => $message
         ]);
     }
 }
