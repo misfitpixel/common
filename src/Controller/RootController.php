@@ -9,24 +9,46 @@
 namespace MisfitPixel\Controller;
 
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class RootController
- * @package Controller
+ * @package MisfitPixel\Controller
  */
 class RootController
 {
+    /** @var ContainerInterface  */
+    private ContainerInterface $container;
+
+    /**
+     * @param ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * @return JsonResponse
      */
-    public function root()
+    public function index(): Response
     {
         $version = shell_exec('git describe --tags `git rev-list --tags --max-count=1`');
+        $documentationUrl = null;
+
+        try {
+            $documentationUrl = $this->container->getParameter('misfitpixel.common.documentation_url');
+
+        } catch(InvalidArgumentException $e) {
+            // do nothing.
+        }
 
         return new JsonResponse([
             'version' => ($version != null) ? $version : 'Development',
-            'documentation_url' => 'https://www.mtgbracket.com/developers',
+            'documentation_url' => $documentationUrl,
             'message' => 'Welcome to mtgbracket! Interested in working with our API? Take a look at the developer resources and get started!'
         ]);
     }
