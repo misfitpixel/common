@@ -9,6 +9,7 @@
 namespace MisfitPixel\Controller;
 
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,19 +19,8 @@ use Symfony\Component\HttpFoundation\Response;
  * Class RootController
  * @package MisfitPixel\Controller
  */
-class RootController
+class RootController extends AbstractController
 {
-    /** @var ContainerInterface  */
-    private ContainerInterface $container;
-
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
     /**
      * @return JsonResponse
      */
@@ -40,7 +30,7 @@ class RootController
         $documentationUrl = null;
 
         try {
-            $documentationUrl = $this->container->getParameter('misfitpixel.common.documentation_url');
+            $documentationUrl = $this->getParameter('misfitpixel.common.documentation_url');
 
         } catch(InvalidArgumentException $e) {
             // do nothing.
