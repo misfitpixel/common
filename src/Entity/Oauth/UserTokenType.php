@@ -6,29 +6,33 @@
  * Time: 9:09 PM
  */
 
-namespace MisfitPixel\Entity;
+namespace MisfitPixel\Entity\Oauth;
 
+use MisfitPixel\Entity\Abstraction\Respondent;
 
 /**
- * Class OauthTokenType
- * @package MisfitPixel\Entity
+ * Class UserTokenType
+ * @package MisfitPixel\Entity\Oauth
  */
-class OauthTokenType
+class UserTokenType
 {
     const ACCESS_TOKEN = 1;
     const REFRESH_TOKEN = 2;
     const AUTHORIZATION_CODE = 3;
+    const PASSWORD_RESET = 4;
 
-    /** @var int */
-    private $id;
+    use Respondent;
+
+    /** @var int|null  */
+    private ?int $id;
 
     /** @var string */
-    private $name;
+    private string $name;
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }

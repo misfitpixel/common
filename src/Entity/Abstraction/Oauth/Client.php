@@ -1,0 +1,130 @@
+<?php
+
+namespace MisfitPixel\Entity\Abstraction\Oauth;
+
+use Doctrine\Persistence\Event\LifecycleEventArgs;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use MisfitPixel\Entity\Abstraction\Dated;
+use MisfitPixel\Entity\Abstraction\Persistent;
+use MisfitPixel\Entity\Abstraction\Respondent;
+use MisfitPixel\Entity\Abstraction\Statused;
+
+/**
+ * Class Client
+ * @package MisfitPixel\Entity\Abstraction\Oauth
+ */
+abstract class Client implements ClientEntityInterface
+{
+    use Dated, Statused, Persistent, Respondent;
+
+    /** @var int|null  */
+    private ?int $id;
+
+    /** @var string  */
+    private string $clientId;
+
+    /** @var string  */
+    private string $secret;
+
+    /** @var string  */
+    private string $name;
+
+    /**
+     * @return string
+     */
+    public abstract function getEntityClassName(): string;
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClientId(): string
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * @param LifecycleEventArgs $event
+     * @return $this
+     * @throws \Exception
+     */
+    public function generateClientId(LifecycleEventArgs $event): self
+    {
+        do {
+            $clientId = bin2hex(random_bytes(16));
+
+            $client = $event->getObjectManager()->getRepository(Client::class)
+                ->findOneBy([
+                    'clientId' => $clientId
+                ])
+            ;
+
+        } while($client !== null);
+
+        $this->clientId = $clientId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSecret(): string
+    {
+        return $this->secret;
+    }
+
+    /**
+     * @param LifecycleEventArgs $event
+     * @return $this
+     * @throws \Exception
+     */
+    public function generateSecret(LifecycleEventArgs $event): self
+    {
+        $this->secret = bin2hex(random_bytes(64));
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return $this
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConfidential(): bool
+    {
+        return true;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifier(): string
+    {
+        return $this->getClientId();
+    }
+}
