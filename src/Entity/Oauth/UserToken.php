@@ -49,6 +49,11 @@ class UserToken implements AccessTokenEntityInterface, RefreshTokenEntityInterfa
     protected array $scopes = [];
 
     /**
+     * @return string
+     */
+    abstract function getUserClassName(): string;
+
+    /**
      * @param UserTokenType $type
      * @param User $user
      * @param \DateTime $dateExpired
@@ -61,7 +66,7 @@ class UserToken implements AccessTokenEntityInterface, RefreshTokenEntityInterfa
         do {
             $code = bin2hex(random_bytes(16));
 
-            $tokenInUse = (new self())->getManager()->getRepository(UserToken::class)
+            $tokenInUse = (new self())->getManager()->getRepository(self::class)
                 ->findOneByToken($code)
             ;
 
@@ -278,7 +283,7 @@ class UserToken implements AccessTokenEntityInterface, RefreshTokenEntityInterfa
      */
     public function setUserIdentifier($identifier): self
     {
-        $this->setUser($this->getManager()->getRepository(User::class)->findOneByUsername($identifier));
+        $this->setUser($this->getManager()->getRepository($this->getUserClassName())->findOneByUsername($identifier));
 
         return $this;
     }
