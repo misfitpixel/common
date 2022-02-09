@@ -51,7 +51,7 @@ abstract class UserTokenRepository extends BaseRepository
      */
     public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null): UserToken
     {
-        $className = $this->getUserTokenTypeEntityClassName();
+        $className = $this->getEntityClassName();
         $token = new $className();
         $token->setUserTokenType($this->getEntityManager()->getRepository($this->getUserTokenTypeEntityClassName())->find(UserTokenType::ACCESS_TOKEN))
             ->setClient($clientEntity)
@@ -119,7 +119,7 @@ abstract class UserTokenRepository extends BaseRepository
      */
     public function getNewRefreshToken(): UserToken
     {
-        $className = $this->getUserTokenTypeEntityClassName();
+        $className = $this->getEntityClassName();
         $token = new $className();
         $token->setUserTokenType($this->getEntityManager()->getRepository($this->getUserTokenTypeEntityClassName())->find(UserTokenType::REFRESH_TOKEN));
 
@@ -161,7 +161,7 @@ abstract class UserTokenRepository extends BaseRepository
      */
     public function getNewAuthCode(): UserToken
     {
-        $className = $this->getUserTokenTypeEntityClassName();
+        $className = $this->getEntityClassName();
         $token = new $className();
         $token->setUserTokenType($this->getEntityManager()->getRepository($this->getUserTokenTypeEntityClassName())->find(UserTokenType::AUTHORIZATION_CODE));
 
