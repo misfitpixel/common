@@ -1,9 +1,8 @@
 <?php
 
-namespace MisfitPixel\Entity\Oauth;
+namespace MisfitPixel\Entity\Abstraction\Oauth;
 
 use Lcobucci\JWT\Token\Plain;
-use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -11,24 +10,25 @@ use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
 use MisfitPixel\Entity\Abstraction\Dated;
-use MisfitPixel\Entity\Abstraction\Oauth\Client;
 use MisfitPixel\Entity\Abstraction\Persistent;
 use MisfitPixel\Entity\Abstraction\Statused;
+use MisfitPixel\Entity\Oauth\Scope;
+use MisfitPixel\Entity\Oauth\UserTokenType;
 use MisfitPixel\Entity\User;
 
 /**
- * Class UserToken
- * @package MisfitPixel\Entity\Oauth
+ * Class BaseUserToken
+ * @package MisfitPixel\Entity\Abstraction\Oauth
  */
-class UserToken implements AccessTokenEntityInterface, RefreshTokenEntityInterface, AuthCodeEntityInterface
+abstract class BaseUserToken implements AccessTokenEntityInterface, RefreshTokenEntityInterface, AuthCodeEntityInterface
 {
     use Dated, Statused, Persistent, AccessTokenTrait;
 
     /** @var int|null  */
     protected ?int $id = null;
 
-    /** @var UserToken|null  */
-    protected ?UserToken $parent = null;
+    /** @var BaseUserToken|null  */
+    protected ?BaseUserToken $parent = null;
 
     /** @var UserTokenType  */
     protected UserTokenType $userTokenType;
@@ -54,41 +54,6 @@ class UserToken implements AccessTokenEntityInterface, RefreshTokenEntityInterfa
     abstract function getUserClassName(): string;
 
     /**
-     * @param UserTokenType $type
-     * @param User $user
-     * @param \DateTime $dateExpired
-     * @param bool $save
-     * @return UserToken
-     * @throws \Exception
-     */
-    public static function generate(UserTokenType $type, User $user, \DateTime $dateExpired, bool $save = true): UserToken
-    {
-        do {
-            $code = bin2hex(random_bytes(16));
-
-            $tokenInUse = (new self())->getManager()->getRepository(self::class)
-                ->findOneByToken($code)
-            ;
-
-        } while($tokenInUse !== null);
-
-        $token = (new UserToken())
-            ->setUserTokenType($type)
-            ->setUser($user)
-            ->setToken($code)
-            ->setDateExpired($dateExpired)
-        ;
-
-        $token->setPrivateKey(new CryptKey(sprintf("file://%s", (new self)->getContainer()->getParameter('oauth')['private_key'])));
-
-        if($save) {
-            $token->save();
-        }
-
-        return $token;
-    }
-
-    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -97,18 +62,18 @@ class UserToken implements AccessTokenEntityInterface, RefreshTokenEntityInterfa
     }
 
     /**
-     * @return UserToken|null
+     * @return BaseUserToken|null
      */
-    public function getParent(): ?UserToken
+    public function getParent(): ?BaseUserToken
     {
         return $this->parent;
     }
 
     /**
-     * @param UserToken|null $token
+     * @param BaseUserToken|null $token
      * @return $this
      */
-    public function setParent(?UserToken $token): self
+    public function setParent(?BaseUserToken $token): self
     {
         $this->parent = $token;
 
@@ -289,15 +254,15 @@ class UserToken implements AccessTokenEntityInterface, RefreshTokenEntityInterfa
     }
 
     /**
-     * @return UserToken
+     * @return BaseUserToken
      */
-    public function getAccessToken(): UserToken
+    public function getAccessToken(): BaseUserToken
     {
         return $this->getParent();
     }
 
     /**
-     * @param AccessTokenEntityInterface $accessToken
+     * @param AccessTokenEntityInterface|BaseUserToken $accessToken
      * @return $this
      */
     public function setAccessToken(AccessTokenEntityInterface $accessToken): self

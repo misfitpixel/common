@@ -9,7 +9,7 @@ use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
-use MisfitPixel\Entity\Oauth\UserToken;
+use MisfitPixel\Entity\Abstraction\Oauth\BaseUserToken;
 use MisfitPixel\Entity\Oauth\UserTokenType;
 use MisfitPixel\Entity\Status;
 use MisfitPixel\Repository\Abstraction\BaseRepository;
@@ -33,9 +33,9 @@ abstract class BaseUserTokenRepository extends BaseRepository
 
     /**
      * @param string $token
-     * @return UserToken|null
+     * @return BaseUserToken|null
      */
-    public function findOneByToken(string $token): ?UserToken
+    public function findOneByToken(string $token): ?BaseUserToken
     {
         return $this->findOneBy([
             'token' => $token
@@ -46,9 +46,9 @@ abstract class BaseUserTokenRepository extends BaseRepository
      * @param ClientEntityInterface $clientEntity
      * @param array $scopes
      * @param $userIdentifier
-     * @return UserToken
+     * @return BaseUserToken
      */
-    public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null): UserToken
+    public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null): BaseUserToken
     {
         $className = $this->getEntityClassName();
         $token = new $className();
@@ -75,7 +75,7 @@ abstract class BaseUserTokenRepository extends BaseRepository
     }
 
     /**
-     * @param AccessTokenEntityInterface|UserToken $accessTokenEntity
+     * @param AccessTokenEntityInterface|BaseUserToken $accessTokenEntity
      * @return void
      */
     public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
@@ -89,7 +89,7 @@ abstract class BaseUserTokenRepository extends BaseRepository
      */
     public function revokeAccessToken($tokenId)
     {
-        /** @var UserToken $token */
+        /** @var BaseUserToken $token */
         $token = $this->findOneBy([
             'token' => $tokenId
         ]);
@@ -107,16 +107,16 @@ abstract class BaseUserTokenRepository extends BaseRepository
      */
     public function isAccessTokenRevoked($tokenId): bool
     {
-        /** @var UserToken $token */
+        /** @var BaseUserToken $token */
         $token = $this->findOneByToken($tokenId);
 
         return ($token === null) || $token->getStatusId() !== Status::ACTIVE;
     }
 
     /**
-     * @return UserToken
+     * @return BaseUserToken
      */
-    public function getNewRefreshToken(): UserToken
+    public function getNewRefreshToken(): BaseUserToken
     {
         $className = $this->getEntityClassName();
         $token = new $className();
@@ -126,7 +126,7 @@ abstract class BaseUserTokenRepository extends BaseRepository
     }
 
     /**
-     * @param RefreshTokenEntityInterface|UserToken $refreshTokenEntity
+     * @param RefreshTokenEntityInterface|BaseUserToken $refreshTokenEntity
      * @return void
      */
     public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity)
@@ -156,9 +156,9 @@ abstract class BaseUserTokenRepository extends BaseRepository
     }
 
     /**
-     * @return UserToken
+     * @return BaseUserToken
      */
-    public function getNewAuthCode(): UserToken
+    public function getNewAuthCode(): BaseUserToken
     {
         $className = $this->getEntityClassName();
         $token = new $className();
@@ -168,7 +168,7 @@ abstract class BaseUserTokenRepository extends BaseRepository
     }
 
     /**
-     * @param AuthCodeEntityInterface|UserToken $authCodeEntity
+     * @param AuthCodeEntityInterface|BaseUserToken $authCodeEntity
      * @return void
      */
     public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity)
