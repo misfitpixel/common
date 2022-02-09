@@ -24,10 +24,10 @@ class UserTokenType
     use Respondent;
 
     /** @var int|null  */
-    private ?int $id;
+    protected ?int $id;
 
     /** @var string */
-    private string $name;
+    protected string $name;
 
     /**
      * @return int|null

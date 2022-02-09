@@ -20,16 +20,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, UserEnt
     use Dated, Statused, Descriptive, Persistent, Respondent;
 
     /** @var int|null  */
-    private ?int $id = null;
+    protected ?int $id = null;
 
     /** @var string */
-    private string $username;
+    protected string $username;
 
     /** @var string */
-    private string $password;
+    protected string $password;
 
     /** @var string|null  */
-    private ?string $salt = null;
+    protected ?string $salt = null;
 
     /**
      * @return int|null

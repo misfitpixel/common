@@ -25,28 +25,28 @@ class UserToken implements AccessTokenEntityInterface, RefreshTokenEntityInterfa
     use Dated, Statused, Persistent, AccessTokenTrait;
 
     /** @var int|null  */
-    private ?int $id = null;
+    protected ?int $id = null;
 
     /** @var UserToken|null  */
-    private ?UserToken $parent = null;
+    protected ?UserToken $parent = null;
 
     /** @var UserTokenType  */
-    private UserTokenType $userTokenType;
+    protected UserTokenType $userTokenType;
 
     /** @var User|null  */
-    private ?User $user = null;
+    protected ?User $user = null;
 
     /** @var Client|null  */
-    private ?Client $client = null;
+    protected ?Client $client = null;
 
     /** @var string  */
-    private string $token;
+    protected string $token;
 
     /** @var \DateTime|null  */
-    private ?\DateTime $dateExpired;
+    protected ?\DateTime $dateExpired;
 
     /** @var Scope[]  */
-    private array $scopes = [];
+    protected array $scopes = [];
 
     /**
      * @param UserTokenType $type

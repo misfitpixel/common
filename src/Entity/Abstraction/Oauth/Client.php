@@ -18,16 +18,16 @@ abstract class Client implements ClientEntityInterface
     use Dated, Statused, Persistent, Respondent;
 
     /** @var int|null  */
-    private ?int $id;
+    protected ?int $id;
 
     /** @var string  */
-    private string $clientId;
+    protected string $clientId;
 
     /** @var string  */
-    private string $secret;
+    protected string $secret;
 
     /** @var string  */
-    private string $name;
+    protected string $name;
 
     /**
      * @return string

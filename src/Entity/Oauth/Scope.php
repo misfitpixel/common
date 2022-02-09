@@ -15,16 +15,16 @@ class Scope implements ScopeEntityInterface
     use Respondent, ScopeTrait;
 
     /** @var int|null  */
-    private ?int $id;
+    protected ?int $id;
 
     /** @var string  */
-    private string $name;
+    protected string $name;
 
     /** @var string  */
-    private string $identifier;
+    protected string $identifier;
 
     /** @var string|null  */
-    private ?string $description;
+    protected ?string $description;
 
     /**
      * @return int|null
