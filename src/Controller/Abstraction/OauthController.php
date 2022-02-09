@@ -1,23 +1,22 @@
 <?php
 
-namespace MisfitPixel\Controller;
+namespace MisfitPixel\Controller\Abstraction;
 
-use League\OAuth2\Server\Grant\ClientCredentialsGrant;
-use League\OAuth2\Server\Grant\PasswordGrant;
-use League\OAuth2\Server\Grant\RefreshTokenGrant;
-use League\OAuth2\Server\Repositories\UserRepositoryInterface;
-use MisfitPixel\Entity\User;
-use MisfitPixel\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
+use League\OAuth2\Server\Grant\ClientCredentialsGrant;
+use League\OAuth2\Server\Grant\PasswordGrant;
+use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
-use MisfitPixel\Controller\Abstraction\BaseController;
+use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use MisfitPixel\Entity\User;
+use MisfitPixel\Exception;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -29,9 +28,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class OauthController
- * @package MisfitPixel\Controller
+ * @package MisfitPixel\Controller\Abstraction
  */
-class OauthController extends BaseController
+abstract class OauthController extends BaseController
 {
     /** @var ClientRepositoryInterface  */
     private ClientRepositoryInterface $clientRepository;
@@ -65,26 +64,42 @@ class OauthController extends BaseController
     {
         parent::__construct($manager);
 
-        $this->clientRepository = $this->getManager()->getRepository(Entity\App::class);
-        $this->scopeRepository = $this->getManager()->getRepository(Entity\Scope::class);
-        $this->accessTokenRepository = $this->getManager()->getRepository(Entity\UserToken::class);
+        $this->clientRepository = $this->getClientRepository();
+        $this->scopeRepository = $this->getScopeRepository();
+        $this->accessTokenRepository = $this->getUserTokenRepository();
         $this->authCodeRepository = $this->accessTokenRepository;
         $this->refreshTokenRepository = $this->accessTokenRepository;
-        $this->userRepository = $this->getManager()->getRepository(Entity\User::class);
+        $this->userRepository = $this->getUserRepository();
 
         $this->privateKey = sprintf("file://%s", $container->getParameter('oauth')['private_key']);
         $this->encryptionKey = $container->getParameter('oauth')['encryption_key'];
     }
 
-    public function signin(Request $request): Response
-    {
-        /**
-         * TODO: handle errors with URL parameters.
-         */
-        return $this->render('oauth/signin.html.twig', [
-            'error_message' => null
-        ]);
-    }
+    /**
+     * @return ClientRepositoryInterface
+     */
+    abstract function getClientRepository(): ClientRepositoryInterface;
+
+    /**
+     * @return ScopeRepositoryInterface
+     */
+    abstract function getScopeRepository(): ScopeRepositoryInterface;
+
+    /**
+     * @return AccessTokenRepositoryInterface|RefreshTokenRepositoryInterface|AuthCodeRepositoryInterface
+     */
+    abstract function getUserTokenRepository();
+
+    /**
+     * @return UserRepositoryInterface
+     */
+    abstract function getUserRepository(): UserRepositoryInterface;
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    abstract function signin(Request $request): Response;
 
     /**
      * @param Request $request
