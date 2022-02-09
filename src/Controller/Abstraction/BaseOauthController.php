@@ -27,10 +27,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class OauthController
+ * Class BaseOauthController
  * @package MisfitPixel\Controller\Abstraction
  */
-abstract class OauthController extends BaseController
+abstract class BaseOauthController extends BaseController
 {
     /** @var ClientRepositoryInterface  */
     private ClientRepositoryInterface $clientRepository;
