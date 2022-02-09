@@ -96,6 +96,11 @@ abstract class BaseOauthController extends BaseController
     abstract function getUserRepository(): UserRepositoryInterface;
 
     /**
+     * @return string
+     */
+    abstract function getUserClassName(): string;
+
+    /**
      * @param Request $request
      * @return Response
      */
@@ -133,7 +138,7 @@ abstract class BaseOauthController extends BaseController
             $authRequest = $server->validateAuthorizationRequest($this->convertToPsr($request));
 
             /** @var User $user */
-            $user = $this->getManager()->getRepository(User::class)->findOneByUsername($request->request->get('username'));
+            $user = $this->getManager()->getRepository($this->getUserClassName())->findOneByUsername($request->request->get('username'));
 
             if($user === null) {
                 throw new Exception\UnauthorizedException();

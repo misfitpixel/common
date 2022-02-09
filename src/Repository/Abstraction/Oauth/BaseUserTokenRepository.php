@@ -12,14 +12,13 @@ use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use MisfitPixel\Entity\Oauth\UserToken;
 use MisfitPixel\Entity\Oauth\UserTokenType;
 use MisfitPixel\Entity\Status;
-use MisfitPixel\Entity\User;
 use MisfitPixel\Repository\Abstraction\BaseRepository;
 
 /**
- * Class UserTokenRepository
+ * Class BaseUserTokenRepository
  * @package MisfitPixel\Repository\Abstraction\Oauth
  */
-abstract class UserTokenRepository extends BaseRepository
+abstract class BaseUserTokenRepository extends BaseRepository
     implements AccessTokenRepositoryInterface, RefreshTokenRepositoryInterface, AuthCodeRepositoryInterface
 {
     /**

@@ -8,10 +8,10 @@ use MisfitPixel\Entity\Status;
 use MisfitPixel\Repository\Abstraction\BaseRepository;
 
 /**
- * Class ClientRepository
+ * Class BaseClientRepository
  * @package MisfitPixel\Repository\Abstraction\Oauth
  */
-abstract class ClientRepository extends BaseRepository implements ClientRepositoryInterface
+abstract class BaseClientRepository extends BaseRepository implements ClientRepositoryInterface
 {
     /**
      * @param $clientIdentifier

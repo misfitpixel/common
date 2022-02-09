@@ -7,10 +7,10 @@ use MisfitPixel\Entity\Oauth\Scope;
 use MisfitPixel\Repository\Abstraction\BaseRepository;
 
 /**
- * Class ScopeRepository
+ * Class BaseScopeRepository
  * @package MisfitPixel\Repository\Abstraction\Oauth
  */
-abstract class ScopeRepository extends BaseRepository implements ScopeRepositoryInterface
+abstract class BaseScopeRepository extends BaseRepository implements ScopeRepositoryInterface
 {
     /**
      * @param string $identifier

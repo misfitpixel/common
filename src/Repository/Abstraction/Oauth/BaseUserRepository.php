@@ -8,10 +8,10 @@ use MisfitPixel\Entity\User;
 use MisfitPixel\Repository\Abstraction\BaseRepository;
 
 /**
- * Class UserRepository
+ * Class BaseUserRepository
  * @package MisfitPixel\Repository\Abstraction\Oauth
  */
-abstract class UserRepository extends BaseRepository implements UserRepositoryInterface
+abstract class BaseUserRepository extends BaseRepository implements UserRepositoryInterface
 {
     /**
      * @param string $username

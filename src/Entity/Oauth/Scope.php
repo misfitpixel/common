@@ -4,6 +4,7 @@ namespace MisfitPixel\Entity\Oauth;
 
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Entities\Traits\ScopeTrait;
+use MisfitPixel\Entity\Abstraction\Respondent;
 
 /**
  * Class Scope
@@ -11,7 +12,7 @@ use League\OAuth2\Server\Entities\Traits\ScopeTrait;
  */
 class Scope implements ScopeEntityInterface
 {
-    use ScopeTrait;
+    use Respondent, ScopeTrait;
 
     /** @var int|null  */
     protected ?int $id;
