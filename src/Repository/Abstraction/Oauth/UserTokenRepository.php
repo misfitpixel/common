@@ -23,6 +23,16 @@ abstract class UserTokenRepository extends BaseRepository
     implements AccessTokenRepositoryInterface, RefreshTokenRepositoryInterface, AuthCodeRepositoryInterface
 {
     /**
+     * @return string
+     */
+    abstract function getUserTokenTypeEntityClassName(): string;
+
+    /**
+     * @return string
+     */
+    abstract function getUserEntityClassName(): string;
+
+    /**
      * @param string $token
      * @return UserToken|null
      */
@@ -42,7 +52,7 @@ abstract class UserTokenRepository extends BaseRepository
     public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null): UserToken
     {
         $token = new UserToken();
-        $token->setUserTokenType($this->getEntityManager()->getRepository(UserTokenType::class)->find(UserTokenType::ACCESS_TOKEN))
+        $token->setUserTokenType($this->getEntityManager()->getRepository($this->getUserTokenTypeEntityClassName())->find(UserTokenType::ACCESS_TOKEN))
             ->setClient($clientEntity)
         ;
 
@@ -58,7 +68,7 @@ abstract class UserTokenRepository extends BaseRepository
          * set a user on the token.
          */
         if($userIdentifier !== null) {
-            $token->setUser($this->getEntityManager()->getRepository(User::class)->findOneByUsername($userIdentifier));
+            $token->setUser($this->getEntityManager()->getRepository($this->getUserEntityClassName())->findOneByUsername($userIdentifier));
         }
 
         return $token;
@@ -109,7 +119,7 @@ abstract class UserTokenRepository extends BaseRepository
     public function getNewRefreshToken(): UserToken
     {
         $token = new UserToken();
-        $token->setUserTokenType($this->getEntityManager()->getRepository(UserTokenType::class)->find(UserTokenType::REFRESH_TOKEN));
+        $token->setUserTokenType($this->getEntityManager()->getRepository($this->getUserTokenTypeEntityClassName())->find(UserTokenType::REFRESH_TOKEN));
 
         return $token;
     }
@@ -150,7 +160,7 @@ abstract class UserTokenRepository extends BaseRepository
     public function getNewAuthCode(): UserToken
     {
         $token = new UserToken();
-        $token->setUserTokenType($this->getEntityManager()->getRepository(UserTokenType::class)->find(UserTokenType::AUTHORIZATION_CODE));
+        $token->setUserTokenType($this->getEntityManager()->getRepository($this->getUserTokenTypeEntityClassName())->find(UserTokenType::AUTHORIZATION_CODE));
 
         return $token;
     }
