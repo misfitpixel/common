@@ -1,6 +1,6 @@
 <?php
 
-namespace MisfitPixel\Security;
+namespace MisfitPixel\Security\Abstraction;
 
 use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Configuration;
@@ -21,10 +21,10 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
 /**
- * Class OauthAuthenticator
- * @package App\Security
+ * Class BaseOauthAuthenticator
+ * @package MisfitPixel\Security
  */
-class OauthAuthenticator extends AbstractAuthenticator
+abstract class BaseOauthAuthenticator extends AbstractAuthenticator
 {
     /** @var ContainerInterface  */
     private ContainerInterface $container;
@@ -55,6 +55,11 @@ class OauthAuthenticator extends AbstractAuthenticator
             )
         );
     }
+
+    /**
+     * @return string
+     */
+    abstract function getUserEntityClassName(): string;
 
     /**
      * @param Request $request
@@ -118,7 +123,7 @@ class OauthAuthenticator extends AbstractAuthenticator
                 /**
                  * match user to username encoded in JWT.
                  */
-                return $this->container->get('doctrine')->getRepository(User::class)->findOneByUsername($decodedJwt->claims()->get('sub'));
+                return $this->container->get('doctrine')->getRepository($this->getUserEntityClassName())->findOneByUsername($decodedJwt->claims()->get('sub'));
             })
         );
     }
