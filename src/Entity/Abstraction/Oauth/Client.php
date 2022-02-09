@@ -15,8 +15,6 @@ use MisfitPixel\Entity\Abstraction\Statused;
  */
 abstract class Client implements ClientEntityInterface
 {
-    use Dated, Statused, Persistent, Respondent;
-
     /** @var int|null  */
     protected ?int $id;
 
