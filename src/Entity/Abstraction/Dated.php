@@ -16,10 +16,10 @@ namespace MisfitPixel\Entity\Abstraction;
 trait Dated
 {
     /** @var \DateTIme */
-    private \DateTime $dateCreated;
+    protected \DateTime $dateCreated;
 
     /** @var \DateTime */
-    private \DateTime $dateUpdated;
+    protected \DateTime $dateUpdated;
 
     /**
      * @return \DateTime

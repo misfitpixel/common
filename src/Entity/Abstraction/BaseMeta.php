@@ -11,16 +11,16 @@ abstract class BaseMeta implements Meta
     use Dated, Persistent;
 
     /** @var ?int */
-    private ?int $id;
+    protected ?int $id;
 
     /** @var string */
-    private string $field;
+    protected string $field;
 
     /** @var ?string */
-    private ?string $value1;
+    protected ?string $value1;
 
     /** @var ?string */
-    private ?string $value2;
+    protected ?string $value2;
 
     /**
      * @return int|null

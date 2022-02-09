@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Kernel;
 trait Descriptive
 {
     /** @var array */
-    private array $metaTree;
+    protected array $metaTree;
 
     /**
      * @return int|null
