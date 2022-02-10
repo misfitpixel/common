@@ -64,7 +64,10 @@ abstract class BaseOauthController extends BaseController
     {
         parent::__construct($manager);
 
-        $this->clientRepository = $this->getClientRepository();
+        /** @var ClientRepositoryInterface $clientRepository */
+        $clientRepository = $manager->getRepository($this->getParameter('oauth')['client_entity']);
+
+        $this->clientRepository = $clientRepository;
         $this->scopeRepository = $this->getScopeRepository();
         $this->accessTokenRepository = $this->getUserTokenRepository();
         $this->authCodeRepository = $this->accessTokenRepository;
