@@ -65,43 +65,27 @@ abstract class BaseOauthController extends BaseController
         parent::__construct($manager);
 
         /** @var ClientRepositoryInterface $clientRepository */
-        $clientRepository = $manager->getRepository($this->getParameter('oauth')['client_entity']);
+        $clientRepository = $manager->getRepository($container->getParameter('oauth')['client_entity']);
+
+        /** @var ScopeRepositoryInterface $scopeRepository */
+        $scopeRepository = $manager->getRepository($container->getParameter('oauth')['scope_entity']);
+
+        /** @var AccessTokenRepositoryInterface|RefreshTokenRepositoryInterface|AuthCodeRepositoryInterface $accessTokenRepository */
+        $accessTokenRepository = $manager->getRepository($container->getParameter('oauth')['token_entity']);
+
+        /** @var UserRepositoryInterface $userRepository */
+        $userRepository = $manager->getRepository($container->getParameter('oauth')['user_entity']);
 
         $this->clientRepository = $clientRepository;
-        $this->scopeRepository = $this->getScopeRepository();
-        $this->accessTokenRepository = $this->getUserTokenRepository();
+        $this->scopeRepository = $scopeRepository;
+        $this->accessTokenRepository = $accessTokenRepository;
         $this->authCodeRepository = $this->accessTokenRepository;
         $this->refreshTokenRepository = $this->accessTokenRepository;
-        $this->userRepository = $this->getUserRepository();
+        $this->userRepository = $userRepository;
 
         $this->privateKey = sprintf("file://%s", $container->getParameter('oauth')['private_key']);
         $this->encryptionKey = $container->getParameter('oauth')['encryption_key'];
     }
-
-    /**
-     * @return ClientRepositoryInterface
-     */
-    abstract function getClientRepository(): ClientRepositoryInterface;
-
-    /**
-     * @return ScopeRepositoryInterface
-     */
-    abstract function getScopeRepository(): ScopeRepositoryInterface;
-
-    /**
-     * @return AccessTokenRepositoryInterface|RefreshTokenRepositoryInterface|AuthCodeRepositoryInterface
-     */
-    abstract function getUserTokenRepository();
-
-    /**
-     * @return UserRepositoryInterface
-     */
-    abstract function getUserRepository(): UserRepositoryInterface;
-
-    /**
-     * @return string
-     */
-    abstract function getUserClassName(): string;
 
     /**
      * @param Request $request
@@ -141,7 +125,7 @@ abstract class BaseOauthController extends BaseController
             $authRequest = $server->validateAuthorizationRequest($this->convertToPsr($request));
 
             /** @var User $user */
-            $user = $this->getManager()->getRepository($this->getUserClassName())->findOneByUsername($request->request->get('username'));
+            $user = $this->userRepository->findOneByUsername($request->request->get('username'));
 
             if($user === null) {
                 throw new Exception\UnauthorizedException();
