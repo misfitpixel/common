@@ -49,11 +49,6 @@ abstract class BaseUserToken implements AccessTokenEntityInterface, RefreshToken
     protected array $scopes = [];
 
     /**
-     * @return string
-     */
-    abstract function getUserClassName(): string;
-
-    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -248,7 +243,7 @@ abstract class BaseUserToken implements AccessTokenEntityInterface, RefreshToken
      */
     public function setUserIdentifier($identifier): self
     {
-        $this->setUser($this->getManager()->getRepository($this->getUserClassName())->findOneByUsername($identifier));
+        $this->setUser($this->getManager()->getRepository($this->getContainer()->getParameter('oauth')['user_entity'])->findOneByUsername($identifier));
 
         return $this;
     }

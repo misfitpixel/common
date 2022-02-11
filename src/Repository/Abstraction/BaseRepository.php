@@ -12,6 +12,7 @@ namespace MisfitPixel\Repository\Abstraction;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use MisfitPixel\Exception\BadRequestException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class BaseRepository
@@ -19,25 +20,28 @@ use MisfitPixel\Exception\BadRequestException;
  */
 abstract class BaseRepository extends ServiceEntityRepository
 {
+    /** @var ContainerInterface  */
+    private ContainerInterface $container;
 
     /** @var int */
-    private $offset;
+    private int $offset;
 
-    /** @var int */
-    private $limit;
+    /** @var int|null  */
+    private ?int $limit = null;
 
     /** @var array */
-    private $order;
+    private array $order = [];
 
     /**
-     * BaseRepository constructor.
      * @param ManagerRegistry $registry
+     * @param ContainerInterface $container
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, ContainerInterface $container)
     {
-        $this->offset = 0;
-
         parent::__construct($registry, $this->getEntityClassName());
+
+        $this->container = $container;
+        $this->offset = 0;
     }
 
     /**
@@ -118,5 +122,13 @@ abstract class BaseRepository extends ServiceEntityRepository
     public function findAll()
     {
         return parent::findBy([], null, $this->getLimit(), $this->getOffset());
+    }
+
+    /**
+     * @return ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
     }
 }

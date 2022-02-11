@@ -22,16 +22,6 @@ abstract class BaseUserTokenRepository extends BaseRepository
     implements AccessTokenRepositoryInterface, RefreshTokenRepositoryInterface, AuthCodeRepositoryInterface
 {
     /**
-     * @return string
-     */
-    abstract function getUserTokenTypeEntityClassName(): string;
-
-    /**
-     * @return string
-     */
-    abstract function getUserEntityClassName(): string;
-
-    /**
      * @param string $token
      * @return BaseUserToken|null
      */
@@ -52,7 +42,7 @@ abstract class BaseUserTokenRepository extends BaseRepository
     {
         $className = $this->getEntityClassName();
         $token = new $className();
-        $token->setUserTokenType($this->getEntityManager()->getRepository($this->getUserTokenTypeEntityClassName())->find(UserTokenType::ACCESS_TOKEN))
+        $token->setUserTokenType($this->getEntityManager()->getRepository($this->getContainer()->getParameter('oauth')['user_token_type_entity'])->find(UserTokenType::ACCESS_TOKEN))
             ->setClient($clientEntity)
         ;
 
@@ -68,7 +58,7 @@ abstract class BaseUserTokenRepository extends BaseRepository
          * set a user on the token.
          */
         if($userIdentifier !== null) {
-            $token->setUser($this->getEntityManager()->getRepository($this->getUserEntityClassName())->findOneByUsername($userIdentifier));
+            $token->setUser($this->getEntityManager()->getRepository($this->getContainer()->getParameter('oauth')['user_entity'])->findOneByUsername($userIdentifier));
         }
 
         return $token;
@@ -120,7 +110,7 @@ abstract class BaseUserTokenRepository extends BaseRepository
     {
         $className = $this->getEntityClassName();
         $token = new $className();
-        $token->setUserTokenType($this->getEntityManager()->getRepository($this->getUserTokenTypeEntityClassName())->find(UserTokenType::REFRESH_TOKEN));
+        $token->setUserTokenType($this->getEntityManager()->getRepository($this->getContainer()->getParameter('oauth')['user_token_type_entity'])->find(UserTokenType::REFRESH_TOKEN));
 
         return $token;
     }
@@ -162,7 +152,7 @@ abstract class BaseUserTokenRepository extends BaseRepository
     {
         $className = $this->getEntityClassName();
         $token = new $className();
-        $token->setUserTokenType($this->getEntityManager()->getRepository($this->getUserTokenTypeEntityClassName())->find(UserTokenType::AUTHORIZATION_CODE));
+        $token->setUserTokenType($this->getEntityManager()->getRepository($this->getContainer()->getParameter('oauth')['user_token_type_entity'])->find(UserTokenType::AUTHORIZATION_CODE));
 
         return $token;
     }

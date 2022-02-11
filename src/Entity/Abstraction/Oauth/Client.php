@@ -30,11 +30,6 @@ abstract class Client implements ClientEntityInterface
     protected string $name;
 
     /**
-     * @return string
-     */
-    public abstract function getEntityClassName(): string;
-
-    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -60,7 +55,7 @@ abstract class Client implements ClientEntityInterface
         do {
             $clientId = bin2hex(random_bytes(16));
 
-            $client = $event->getObjectManager()->getRepository(Client::class)
+            $client = $event->getObjectManager()->getRepository($this->getContainer()->getParameter('oauth')['client_entity'])
                 ->findOneBy([
                     'clientId' => $clientId
                 ])

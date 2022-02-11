@@ -56,11 +56,6 @@ abstract class BaseOauthAuthenticator extends AbstractAuthenticator
     }
 
     /**
-     * @return string
-     */
-    abstract function getUserEntityClassName(): string;
-
-    /**
      * @param Request $request
      * @return bool|null
      */
@@ -122,7 +117,7 @@ abstract class BaseOauthAuthenticator extends AbstractAuthenticator
                 /**
                  * match user to username encoded in JWT.
                  */
-                return $this->container->get('doctrine')->getRepository($this->getUserEntityClassName())->findOneByUsername($decodedJwt->claims()->get('sub'));
+                return $this->container->get('doctrine')->getRepository($this->container->getParameter('oauth')['user_entity'])->findOneByUsername($decodedJwt->claims()->get('sub'));
             })
         );
     }
