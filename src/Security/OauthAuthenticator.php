@@ -1,6 +1,6 @@
 <?php
 
-namespace MisfitPixel\Security\Abstraction;
+namespace MisfitPixel\Security;
 
 use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Configuration;
@@ -20,10 +20,10 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
 /**
- * Class BaseOauthAuthenticator
- * @package MisfitPixel\Security
+ * Class OauthAuthenticator
+ * @package MisfitPixel\Security\Abstraction
  */
-abstract class BaseOauthAuthenticator extends AbstractAuthenticator
+class OauthAuthenticator extends AbstractAuthenticator
 {
     /** @var ContainerInterface  */
     private ContainerInterface $container;
