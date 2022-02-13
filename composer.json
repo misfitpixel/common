@@ -10,14 +10,15 @@
     ],
     "require": {
         "php": ">=7.4",
+        "ext-json": "*",
+        "ext-curl": "*",
+        "ext-pdo": "*",
         "doctrine/orm": "*",
         "symfony/framework-bundle": "5.4.2",
         "symfony/orm-pack": "^1.0",
         "twig/twig": "^2.0",
         "symfony/yaml": "^5.0",
-        "ext-json": "*",
         "swiftmailer/swiftmailer": "^6.2",
-        "ext-curl": "*",
         "google/cloud-pubsub": "^1.21",
         "symfony/validator": "^5.0",
         "symfony/form": "^5.0",
@@ -27,7 +28,7 @@
         "league/oauth2-server": "^8.3",
         "symfony/psr-http-message-bridge": "^2.1",
         "symfony/security-bundle": "^5.4",
-        "nyholm/psr7": "^1.5"
+        "nyholm/psr7": "^1.5",
     },
     "autoload": {
         "psr-4": {
