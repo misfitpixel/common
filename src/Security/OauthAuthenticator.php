@@ -117,7 +117,10 @@ class OauthAuthenticator extends AbstractAuthenticator
                 }
 
                 /** @var BaseUserToken $userToken */
-                $userToken = $this->container->get('doctrine')->getRepository($this->container->getParameter('oauth')['token_entity'])->findOneByToken($identifier);
+                $userToken = $this->container->get('doctrine')
+                    ->getRepository($this->container->getParameter('oauth')['token_entity'])
+                    ->findOneByToken($decodedJwt->claims()->get('jti'))
+                ;
 
                 /**
                  * confirm validity of token.
