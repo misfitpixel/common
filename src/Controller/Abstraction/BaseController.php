@@ -8,9 +8,9 @@
 
 namespace MisfitPixel\Controller\Abstraction;
 
-
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -22,12 +22,17 @@ abstract class BaseController extends AbstractController
     /** @var ManagerRegistry  */
     private ManagerRegistry $manager;
 
+    /** @var EventDispatcherInterface  */
+    protected EventDispatcherInterface $dispatcher;
+
     /**
      * @param ManagerRegistry $manager
+     * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct(ManagerRegistry $manager)
+    public function __construct(ManagerRegistry $manager, EventDispatcherInterface $dispatcher)
     {
         $this->manager = $manager;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
