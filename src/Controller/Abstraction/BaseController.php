@@ -74,4 +74,13 @@ abstract class BaseController extends AbstractController
 
         return $order;
     }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function getContent(Request $request): array
+    {
+        return json_decode(($request->getContent()), true);
+    }
 }
