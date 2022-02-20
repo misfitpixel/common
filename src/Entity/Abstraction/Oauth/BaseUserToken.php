@@ -287,7 +287,7 @@ abstract class BaseUserToken implements AccessTokenEntityInterface, RefreshToken
         $this->initJwtConfiguration();
 
         return $this->jwtConfiguration->builder()
-            ->permittedFor(($this->getClient()->getClientId()) ?? 'https://alchemy.misfitpixel.io')
+            ->permittedFor(($this->getClient()) ? $this->getClient()->getClientId() : 'https://alchemy.misfitpixel.io')
             ->identifiedBy($this->getIdentifier())
             ->issuedAt(new \DateTimeImmutable())
             ->canOnlyBeUsedAfter(new \DateTimeImmutable())
