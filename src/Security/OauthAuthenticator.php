@@ -8,6 +8,8 @@ use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Lcobucci\JWT\Validation\Constraint\StrictValidAt;
+use MisfitPixel\Entity\Abstraction\Oauth\BaseUserToken;
+use MisfitPixel\Entity\Status;
 use MisfitPixel\Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -114,10 +116,23 @@ class OauthAuthenticator extends AbstractAuthenticator
                     throw new Exception\MissingScopesException($routeScopes);
                 }
 
+                /** @var BaseUserToken $userToken */
+                $userToken = $this->container->get('doctrine')->getRepository($this->container->getParameter('oauth')['token_entity'])->findOneByToken($identifier);
+
+                /**
+                 * confirm validity of token.
+                 */
+                if(
+                    $userToken->getStatusId() !== Status::ACTIVE ||
+                    $userToken->getDateExpired()->getTimestamp() < time()
+                ) {
+                    throw new Exception\UnauthorizedException();
+                }
+
                 /**
                  * match user to username encoded in JWT.
                  */
-                return $this->container->get('doctrine')->getRepository($this->container->getParameter('oauth')['user_entity'])->findOneByUsername($decodedJwt->claims()->get('sub'));
+                return $userToken->getUser();
             })
         );
     }
