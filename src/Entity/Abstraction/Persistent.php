@@ -188,6 +188,8 @@ trait Persistent
      */
     protected function getEntityName(): string
     {
-        return str_replace('App\Entity\\', '', self::class);
+        return str_replace('MisfitPixel\Entity\\', '',
+            str_replace('App\Entity\\', '', self::class)
+        );
     }
 }
