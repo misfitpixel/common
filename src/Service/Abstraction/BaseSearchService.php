@@ -34,25 +34,7 @@ abstract class BaseSearchService
     public function search(string $query, int $offset, int $limit, array $order = []): array
     {
         $entities = [];
-        $criteria = [];
-        $matches = [];
-
-        /**
-         * break the query into blocks of criteria to be evaluated.
-         */
-        preg_match_all($this->getSearchExpression(), $query, $matches);
-
-        foreach($matches as $items) {
-            foreach($items as $item) {
-                $parts = explode(':', $item);
-
-                if(sizeof($parts) !== 2) {
-                    continue;
-                }
-
-                $criteria[$parts[0]][] = $parts[1];
-            }
-        }
+        $criteria = $this->getCriteriaStructure($query);
 
         /**
          * get search-friendly base query.
@@ -132,6 +114,35 @@ abstract class BaseSearchService
         }
 
         return $sql;
+    }
+
+    /**
+     * @param string $query
+     * @return array
+     */
+    public function getCriteriaStructure(string $query): array
+    {
+        $criteria = [];
+        $matches = [];
+
+        /**
+         * break the query into blocks of criteria to be evaluated.
+         */
+        preg_match_all($this->getSearchExpression(), $query, $matches);
+
+        foreach($matches as $items) {
+            foreach($items as $item) {
+                $parts = explode(':', $item);
+
+                if(sizeof($parts) !== 2) {
+                    continue;
+                }
+
+                $criteria[$parts[0]][] = $parts[1];
+            }
+        }
+
+        return $criteria;
     }
 
     /**
