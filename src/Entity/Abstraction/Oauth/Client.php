@@ -83,7 +83,7 @@ abstract class Client implements ClientEntityInterface
      */
     public function generateSecret(LifecycleEventArgs $event): self
     {
-        $this->secret = bin2hex(random_bytes(64));
+        $this->secret = bin2hex(random_bytes(32));
 
         return $this;
     }
