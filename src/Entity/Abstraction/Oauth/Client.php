@@ -18,7 +18,7 @@ abstract class Client implements ClientEntityInterface
     use Dated, Persistent, Respondent, Statused;
 
     /** @var int|null  */
-    protected ?int $id;
+    protected ?int $id = null;
 
     /** @var string  */
     protected string $clientId;
