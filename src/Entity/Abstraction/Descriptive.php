@@ -107,6 +107,10 @@ trait Descriptive
             ])
         ;
 
+        if($meta === null) {
+            return false;
+        }
+
         return $meta->delete();
     }
 

@@ -23,6 +23,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -58,11 +59,12 @@ abstract class BaseOauthController extends BaseController
 
     /**
      * @param ManagerRegistry $manager
+     * @param EventDispatcherInterface $dispatcher
      * @param ContainerInterface $container
      */
-    public function __construct(ManagerRegistry $manager, ContainerInterface $container)
+    public function __construct(ManagerRegistry $manager, EventDispatcherInterface $dispatcher, ContainerInterface $container)
     {
-        parent::__construct($manager);
+        parent::__construct($manager, $dispatcher);
 
         /** @var ClientRepositoryInterface $clientRepository */
         $clientRepository = $manager->getRepository($container->getParameter('oauth')['client_entity']);
